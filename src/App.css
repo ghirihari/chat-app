@@ -1,0 +1,330 @@
+.content {
+  width:100%;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap');
+
+.title_font{
+  font-family: 'Mr Dafoe', cursive;
+  font-size: 70px;
+}
+
+.paragraphs{
+  display: contents;
+}
+
+.signup-card{
+  text-align: center;
+}
+
+.join-form{
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+
+.update-form{
+  margin: 0px 100px;
+}
+
+
+.staff{
+  background-image: linear-gradient(to top, #f77062 0%, #fe5196 100%);
+  color:white
+}
+.contacts_col{
+  background-color: #f8f8f8;
+  padding: 0px;
+  box-shadow: .5rem 0 1rem rgba(0,0,0,.15)!important;
+  z-index: 2;
+  height: 100vh;
+  overflow-y:scroll; 
+
+}
+
+.prev_message{
+  font-size: smaller;
+  margin-bottom: 0px;
+}
+.username{
+  display: inline-block;
+  margin-left: 10px;
+  line-height: 1;
+  font-size: 75%;
+}
+
+.listDP{
+  object-fit: cover;
+  width: 42px;
+  height: 42px;  
+  border-radius: 25%;
+  /* border: 4px solid white; */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.updateDP{
+  object-fit: cover;
+  width: 150px;
+  height: 150px;
+  border-radius: 25%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+
+.listDP2{
+  object-fit: contain;
+  width: 200px;
+  border-radius: 15%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@700&display=swap');
+.sub_Heading
+{
+  font-size: x-large;
+  font-family: 'Roboto Slab', serif;
+}
+
+.recepient_name{
+  font-size: x-large;
+  font-family: 'Roboto Slab', serif;
+}
+
+.search{
+  margin: 10px 20px;
+}
+.Profile_Name{
+  flex-grow: '1';
+  text-align: center;
+  font-size: x-large;
+  font-family: 'Roboto Slab', serif;
+}
+.message-list-name{
+  font-size:large;
+  font-family: 'Roboto Slab', serif;
+  margin-bottom:0px;
+  height: 24px;
+  overflow: 'hidden';
+  white-space: 'nowrap';
+}
+
+.friends-list-name{
+  font-size:xx-large;
+  font-family: 'Roboto Slab', serif;
+  overflow: 'hidden';
+  white-space: 'nowrap';
+}
+
+
+.icon-box{
+  text-align: center;
+}
+.sidebar-icons{
+  width: 30px;
+  cursor: pointer;
+}
+.friend-list-name{
+  font-size:large;
+  font-family: 'Roboto Slab', serif;
+  margin-bottom:0px;
+  height: 24px;
+  overflow: 'hidden';
+  white-space: 'nowrap';
+}
+.add-icon{
+  width: 20px;
+  margin: 0px 0px 0px 10px;
+  fill: white;
+  height: 20px;
+  vertical-align: sub;
+}
+/* .listDP_frame{
+    position: relative;
+    text-align: center;
+    color: white;
+} */
+.messages_list_group{  
+  padding: 0px 10px 0px 10px;
+  cursor: pointer;
+}
+
+.request_group{  
+  padding: 0px;
+}
+
+.messages_list_item{
+  background-color: white;
+  padding: 10px;
+  margin: 7px 0px 0px 0px;
+  border-radius: 10px;
+  color: black;
+}
+.gradient{
+  background-image: linear-gradient( 135deg, #FD6585 10%, #0D25B9 100%);
+}
+.gradient-0{
+  background-image: linear-gradient( 135deg, #4C83FF 10%,  #2AFADF 100%);
+}
+.gradient-1{
+  background-image: linear-gradient( 135deg, #5961F9 10%,  #EE9AE5 100%);
+}
+.gradient-2{
+  background-image: linear-gradient( 135deg, #FD6E6A 10%, #FFC600 100%);
+}
+.gradient-3{
+  background-image: linear-gradient( 135deg, #FFAA85 10%, #B3315F 100%);
+}
+.gradient-4{
+  background-image: linear-gradient( 135deg, #3B2667 10%, #BC78EC 100%);
+}
+
+
+
+.time{
+  text-align: end;
+  font-size: smaller;
+}
+.online{
+  float:right;
+}
+.contactsType{
+  width:100%;
+  padding: 0px 10px;
+}
+.online {
+  position: absolute;
+  bottom: 3px;
+  right: 0px;
+}
+
+.username_div{
+  margin: 10px;
+}
+
+.add-friends{
+  margin:20px 10px;
+}
+
+.subHeading{
+  font-family:Arial, Helvetica, sans-serif ;  
+  font-weight: 500;
+  font-variant:small-caps;
+}
+
+.chat-title{
+  display: flex;
+  background-color: white;
+  padding: 5px;
+  border-radius: 0px 20px;
+  z-index: 1;
+}
+
+.chatDP{
+  height: 70px;
+  width: 70px;
+  object-fit: cover;
+  border: 4px solid white;
+  border-radius: 25%;
+}
+
+.chat-title-label{
+  padding-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.message-input{
+  background-color: white;
+  padding: 10px;
+  box-shadow: 0 -0.5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+
+.chat-col{
+  /* background-color: whitesmoke; */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background-image: url('components/assets/bg-marble.jpg');
+}
+
+.friend-tile{
+  object-fit: cover;
+  width: 150px;
+  height: 150px;  
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+}
+.chat-messages{
+  flex-grow: 1;
+  /* background-color: whitesmoke; */
+  overflow-y:scroll; 
+}
+
+.bubble{
+  display:inline-block;
+  margin: 0px 10px 5px 10px;
+  padding: 10px 20px 10px 20px;
+  /* border: gray solid 1px; */
+  border-radius: 20px;
+  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+}
+
+.bubble-message{
+  margin:0px;
+  display:block;
+  font-size: medium;
+}
+.bubble-date{
+  font-size:smaller;
+}
+
+.bubble-message-name{
+  display: block;
+  font-size: 12px;
+  margin: 0px 0px 0px 20px;
+  font-weight: bold;
+  color: rgba(0,0,0,0.4);
+  font-style: italic;
+}
+
+.sender{
+  background-color: white;
+}
+
+div::-webkit-scrollbar {
+  width: 0px;
+}
+ 
+.right-bubble{
+  text-align: end;
+}
+
+.right-bubble .sender{
+  color: white;
+  background-image: linear-gradient( 135deg, #43CBFF 10%, #9708CC 100%);
+}
+
+.right-bubble .bubble-message-name{
+  margin:0px 20px 0px 0px;
+}
+
+/* .login-input-field{
+  background-color: gray;
+} */
+
+.ListButtons{
+  width:100%;
+  margin-top: 5px;
+}
+
+.upload-on-image{
+  position: relative;
+  bottom: 45px;
+  left: 60px;
+  border-radius: 50%;
+  height: 45px;
+}
