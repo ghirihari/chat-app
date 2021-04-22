@@ -5,7 +5,7 @@ import MessageList from './MessageList';
 import firebase from '../config/firebase';
 import ChatScreen from '../components/ChatScreen'
 import StoriesList from './StoriesList'
-import SettingsList from './SettingsList'
+// import SettingsList from './SettingsList'
 import StoryScreen from './StoryScreen'
 import FriendScreen from './FriendScreen'
 import SettingScreen from './SettingScreen'
@@ -20,13 +20,14 @@ class Chats extends React.Component {
         occupants:[],
         message:null,
         sms:[],
-        fid:null,
+        fid:'gon@hunter.com',
         recipient:null,
-        menu:'Settings',
+        menu:'Chats',
         searched:null,
         error:null,
         friends:null,
-        settingsMenu:null
+        settingsMenu:null,
+        chatData:null
         }
     } 
     
@@ -64,11 +65,10 @@ class Chats extends React.Component {
         fetch("https://garnet-gregarious-robe.glitch.me/SearchUserByMail?email="+this.state.fid)
         .then(response => response.json())
         .then(data => {
-            if(data.status==200){
-                console.log(data)
+            if(data.status===200){
                 this.setState({searched:data.record})
             }
-            else if(data.status==404){
+            else if(data.status===404){
                 this.setState({error:'User Not Found'})
             }
         });
@@ -79,14 +79,16 @@ class Chats extends React.Component {
         fetch("https://garnet-gregarious-robe.glitch.me/AddFriend?uid="+this.state.uid+"&fid="+this.state.fid)
         .then(response => response.json())
         .then(data => {
-            if(data.status==200){
+            if(data.status===200){
                 console.log('Friend Added')
             }
-            else if(data.status==404){
+            else if(data.status===404){
                 this.setState('Error')
             }
         });
     }
+
+    
 
     renderFriends = (user) => {
         var chats = firebase.database().ref('users/' + user.uid + '/friends');
@@ -97,20 +99,13 @@ class Chats extends React.Component {
                 let data = snapshot.val();
                 let fid = Object.entries(data);
                 for (var i in fid){
-                    // firebase.database().ref('users/' + fid[i][0]).once('value').then((snapshot) => {
-                    //     if (snapshot.val()) {
-                    //         this.setState({occupants:this.state.occupants.concat({id:snapshot.key,displayName:snapshot.val().displayName})})
-                    //     }
-                    // });
-            
                     fetch("https://garnet-gregarious-robe.glitch.me/FetchUser?uid="+fid[i][0])
                         .then(response => response.json())
                         .then(data => {
-                            if(data.status==200){
-                                console.log(data.record)
+                            if(data.status===200){
                                 this.setState({occupants:this.state.occupants.concat({id:data.record.uid, displayName:data.record.displayName, displayPicture:data.record.photoURL})})
                             }
-                            else if(data.status==404){
+                            else if(data.status===404){
                                 console.log('error')
                             }
                         });
@@ -120,15 +115,28 @@ class Chats extends React.Component {
         });
     }
 
+    getChats = () => {
+        let chats = firebase.database().ref('users/' + this.state.user.uid + '/messages/');
+        chats.on('value', (snapshot) => {
+            this.setState({chatData:snapshot.val()})
+            console.log('On',snapshot.val())
+        });
+    }
+
+
     componentDidMount = () => {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setState({user:user})
+                // firebase.database().ref('location/'+user.uid).set({latitude:11.0038555, longitude:76.9567438}) 
                 this.renderFriends(user);
+                this.getChats();
             } else {
                 this.props.history.push('/login');
             }
-          });
+        });
+
+
 
     //   this.socket = io('http://localhost:5000');
     //   this.socket.emit('joinroom',this.userid);
@@ -181,7 +189,7 @@ class Chats extends React.Component {
                         {/* Icons*/}
                         <div className="row add-friends">
                             <div className="col icon-box">    
-                                <svg onClick={()=>this.setState({menu:'Chats'})} className="sidebar-icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.001 512.001">
+                                <svg onClick={()=>this.setState({menu:'Chats',recipient:null})} className="sidebar-icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.001 512.001">
                                     <path d="M468.53 306.575c-4.14-10.239-15.798-15.188-26.038-11.046-10.241 4.14-15.187 15.797-11.047 26.038L455 379.833l-69.958-30.839a20.002 20.002 0 00-15.917-.095c-23.908 10.201-49.52 15.373-76.124 15.373-107.073 0-179-83.835-179-162.136 0-89.402 80.299-162.136 179-162.136s179 72.734 179 162.136c0 6.975-.65 15.327-1.781 22.913-1.63 10.925 5.905 21.102 16.83 22.732 10.926 1.634 21.103-5.905 22.732-16.83 1.431-9.59 2.219-19.824 2.219-28.815 0-54.33-23.006-105.308-64.783-143.543C405.936 20.809 351.167 0 293.001 0S180.067 20.809 138.784 58.592c-37.332 34.168-59.66 78.516-63.991 126.335C27.836 216.023.001 265.852.001 319.525c0 33.528 10.563 65.34 30.67 92.717L1.459 484.504a19.998 19.998 0 004.621 21.855 19.989 19.989 0 0021.988 3.942l84.229-37.13c21.188 7.887 43.585 11.88 66.703 11.88.5 0 .991-.039 1.482-.075 33.437-.253 65.944-9.048 94.098-25.507 25.218-14.744 45.962-34.998 60.505-58.917a230.144 230.144 0 0041.547-11.551l107.301 47.3a20 20 0 0021.989-3.942 19.998 19.998 0 004.621-21.855L468.53 306.575zM179.002 445c-.273 0-.539.03-.81.041-20.422-.104-40.078-4.118-58.435-11.95a19.991 19.991 0 00-15.916.095l-46.837 20.646 15.109-37.375a20.001 20.001 0 00-3.322-20.47c-18.835-22.097-28.79-48.536-28.79-76.462 0-31.961 13.445-62.244 36.969-85.206 7.324 39.925 27.989 78.117 59.162 108.119 38.791 37.333 90.101 58.961 145.506 61.565C255.626 429.608 218.402 445 179.002 445z" />
                                     <circle cx={292.001} cy={203} r={20} />
                                     <circle cx={372.001} cy={203} r={20} />
@@ -190,8 +198,9 @@ class Chats extends React.Component {
                             </div>
 
                             <div className="col icon-box">
-                                <svg onClick={()=>this.setState({menu:'Status',recipient:null})} className="sidebar-icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 568.705 568.705">
-                                    <path d="M529.117 317.082c-16.576 0-31.23 10.682-36.342 26.454-27.636 85.372-107.769 147.314-202.232 147.314-117.274 0-212.688-95.424-212.688-212.707 0-94.075 61.43-173.951 146.278-201.901 16.383-5.398 27.483-20.716 27.483-37.985a38.253 38.253 0 00-15.737-30.924 38.255 38.255 0 00-34.251-5.492C84.793 39.468.001 148.976.001 278.147c0 160.218 130.332 290.558 290.541 290.558 128.654 0 237.793-84.126 275.828-200.219a39.183 39.183 0 00-5.514-35.2 39.166 39.166 0 00-31.739-16.204zM355.888 75.905c64.584 20.908 115.691 71.902 136.752 136.419a39.008 39.008 0 0037.103 26.906h.801a38.172 38.172 0 0030.848-15.69 38.204 38.204 0 005.476-34.174c-28.49-88.591-98.416-158.661-186.933-187.36a38.609 38.609 0 00-34.573 5.492 38.587 38.587 0 00-15.89 31.198v.847c-.004 16.556 10.676 31.258 26.416 36.362z" />
+                                <svg onClick={()=>this.setState({menu:'Status',recipient:null})} className="sidebar-icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.032 512.032">
+                                    <path d="M496.016 224c-8.832 0-16 7.168-16 16v181.184l-128 51.2V304c0-8.832-7.168-16-16-16s-16 7.168-16 16v168.352l-128-51.2V167.648l74.144 29.664c8.096 3.264 17.504-.704 20.8-8.928 3.296-8.192-.704-17.504-8.928-20.8l-95.776-38.336h-.032l-.256-.096a15.87 15.87 0 00-11.872 0l-.288.096h-.032L10.064 193.152A16.005 16.005 0 00.016 208v288c0 5.312 2.656 10.272 7.04 13.248a15.892 15.892 0 008.96 2.752c2.016 0 4.032-.384 5.952-1.152l154.048-61.6 153.76 61.504h.032l.288.128a15.87 15.87 0 0011.872 0l.288-.128h.032L502 446.88c6.016-2.464 10.016-8.32 10.016-14.88V240c0-8.832-7.168-16-16-16zm-336 197.152l-128 51.2V218.816l128-51.2v253.536zM400.016 64c-26.464 0-48 21.536-48 48s21.536 48 48 48 48-21.536 48-48-21.536-48-48-48zm0 64c-8.832 0-16-7.168-16-16s7.168-16 16-16 16 7.168 16 16-7.168 16-16 16z" />
+                                    <path d="M400.016 0c-61.76 0-112 50.24-112 112 0 57.472 89.856 159.264 100.096 170.688 3.04 3.36 7.36 5.312 11.904 5.312s8.864-1.952 11.904-5.312C422.16 271.264 512.016 169.472 512.016 112c0-61.76-50.24-112-112-112zm0 247.584c-34.944-41.44-80-105.056-80-135.584 0-44.096 35.904-80 80-80s80 35.904 80 80c0 30.496-45.056 94.144-80 135.584z" />
                                 </svg>
                             </div>
 
@@ -222,7 +231,7 @@ class Chats extends React.Component {
                             <label className="sub_Heading" style={{margin:'0px 15px'}}>{this.state.menu}</label>
                         </div>                        
 
-                        {this.state.menu=="Chats" &&
+                        {(this.state.menu==="Chats"||this.state.menu==="Status") &&
                             <div>
                                 <MessageList 
                                     users={this.state.occupants} 
@@ -232,11 +241,11 @@ class Chats extends React.Component {
                             </div>
                         }
                         
-                        {this.state.menu=="Status" &&
+                        {/* {this.state.menu==="Status" &&
                             <StoriesList/>
-                        }
+                        } */}
 
-                        {this.state.menu=="Settings" &&
+                        {this.state.menu==="Settings" &&
                             <div className="col" style={{marginTop:'10px'}}>
                                 <div>
                                     <button className="btn btn-dark ListButtons" onClick={()=>this.setState({settingsMenu:'Edit'})}>Edit Profile</button>
@@ -253,35 +262,37 @@ class Chats extends React.Component {
 
                         
 
-                        {this.state.menu=="Add Friends" &&
+                        {this.state.menu==="Add Friends" &&
                             <>
                             <div className="search shadow">
                                 <div className="input-group add-friends-input">
-                                    <input type="text" className="form-control" placeholder="Search" onChange={this.fidTyped}/>
+                                    <input type="text" className="form-control" placeholder="Search" onChange={this.fidTyped} value={this.state.fid}/>
                                     <div className="input-group-append">
-                                    <button className="btn btn-dark"  type="button" onClick={this.searchUsers}>
-                                        <svg fill="white" width="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.005 512.005">
-                                            <path d="M505.749 475.587l-145.6-145.6c28.203-34.837 45.184-79.104 45.184-127.317C405.333 90.926 314.41.003 202.666.003S0 90.925 0 202.669s90.923 202.667 202.667 202.667c48.213 0 92.48-16.981 127.317-45.184l145.6 145.6c4.16 4.16 9.621 6.251 15.083 6.251s10.923-2.091 15.083-6.251c8.341-8.341 8.341-21.824-.001-30.165zM202.667 362.669c-88.235 0-160-71.765-160-160s71.765-160 160-160 160 71.765 160 160-71.766 160-160 160z" />
-                                        </svg>
-                                    </button>
+                                        <button className="btn btn-dark"  type="button" onClick={this.searchUsers}>
+                                            <svg fill="white" width="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.005 512.005">
+                                                <path d="M505.749 475.587l-145.6-145.6c28.203-34.837 45.184-79.104 45.184-127.317C405.333 90.926 314.41.003 202.666.003S0 90.925 0 202.669s90.923 202.667 202.667 202.667c48.213 0 92.48-16.981 127.317-45.184l145.6 145.6c4.16 4.16 9.621 6.251 15.083 6.251s10.923-2.091 15.083-6.251c8.341-8.341 8.341-21.824-.001-30.165zM202.667 362.669c-88.235 0-160-71.765-160-160s71.765-160 160-160 160 71.765 160 160-71.766 160-160 160z" />
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
 
                             {this.state.searched &&
-                                <div className="col" style={{textAlign:'center', padding:'10px'}}>
-                                    <div className="col">
-                                        <img alt="DP" className="listDP2"src={logo} />
-                                    </div>
-                                    <div className="col-12" style={{margin:'10px 0px'}}>  
-                                    <button className="btn btn-dark" onClick={this.addFriend}>
-                                        <label className="friend-list-name">{this.state.searched.displayName}
-                                            <svg className="add-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                                <path d="M367.57 256.909a260.207 260.207 0 00-30.093-12.081C370.56 219.996 392 180.455 392 136 392 61.01 330.991 0 256 0S120 61.01 120 136c0 44.504 21.488 84.084 54.633 108.911-30.368 9.998-58.863 25.555-83.803 46.069-45.732 37.617-77.529 90.086-89.532 147.743-3.762 18.066.745 36.622 12.363 50.908C25.222 503.847 42.365 512 60.693 512H307c11.046 0 20-8.954 20-20s-8.954-20-20-20H60.693c-8.538 0-13.689-4.766-15.999-7.606-3.989-4.905-5.533-11.29-4.236-17.519 20.755-99.695 108.691-172.521 210.24-174.977a137.229 137.229 0 0010.656-.002c31.12.73 61.05 7.832 89.044 21.14 9.977 4.74 21.907.499 26.649-9.478 4.742-9.976.5-21.907-9.477-26.649zm-106.692-25.032a260.16 260.16 0 00-9.718.002C200.465 229.35 160 187.312 160 136c0-52.935 43.065-96 96-96s96 43.065 96 96c0 51.299-40.445 93.329-91.122 95.877z" />
-                                                <path d="M492 397h-55v-55c0-11.046-8.954-20-20-20s-20 8.954-20 20v55h-55c-11.046 0-20 8.954-20 20s8.954 20 20 20h55v55c0 11.046 8.954 20 20 20s20-8.954 20-20v-55h55c11.046 0 20-8.954 20-20s-8.954-20-20-20z" />
-                                            </svg>
-                                        </label>
-                                    </button>
+                                <div className="col">
+                                    <div className="row messages_list_item shadow">
+                                        <div className="col" style={{padding:'0px'}}>
+                                            <img alt="DP" className="add-friend-tile"src={this.state.searched.photoURL} />
+                                        </div>
+                                        <div className="col" style={{alignSelf:'center'}}>
+                                            <label className="add-friends-name">{this.state.searched.displayName}</label>
+                                            <button className="btn btn-primary" onClick={this.state.addFriend}>
+                                                Add                                            
+                                                <svg className="add-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                    <path d="M367.57 256.909a260.207 260.207 0 00-30.093-12.081C370.56 219.996 392 180.455 392 136 392 61.01 330.991 0 256 0S120 61.01 120 136c0 44.504 21.488 84.084 54.633 108.911-30.368 9.998-58.863 25.555-83.803 46.069-45.732 37.617-77.529 90.086-89.532 147.743-3.762 18.066.745 36.622 12.363 50.908C25.222 503.847 42.365 512 60.693 512H307c11.046 0 20-8.954 20-20s-8.954-20-20-20H60.693c-8.538 0-13.689-4.766-15.999-7.606-3.989-4.905-5.533-11.29-4.236-17.519 20.755-99.695 108.691-172.521 210.24-174.977a137.229 137.229 0 0010.656-.002c31.12.73 61.05 7.832 89.044 21.14 9.977 4.74 21.907.499 26.649-9.478 4.742-9.976.5-21.907-9.477-26.649zm-106.692-25.032a260.16 260.16 0 00-9.718.002C200.465 229.35 160 187.312 160 136c0-52.935 43.065-96 96-96s96 43.065 96 96c0 51.299-40.445 93.329-91.122 95.877z" />
+                                                    <path d="M492 397h-55v-55c0-11.046-8.954-20-20-20s-20 8.954-20 20v55h-55c-11.046 0-20 8.954-20 20s8.954 20 20 20h55v55c0 11.046 8.954 20 20 20s20-8.954 20-20v-55h55c11.046 0 20-8.954 20-20s-8.954-20-20-20z" />
+                                                </svg>
+                                            </button>                      
+                                        </div>
                                     </div>
                                 </div>
                             }
@@ -302,7 +313,7 @@ class Chats extends React.Component {
                 </div>
 
                     <div className="col-lg-9 col-md-12" style={{padding:'0px'}}>
-                        {(this.state.menu=="Chats" && !this.state.recipient)&&
+                        {(this.state.menu==="Chats" && !this.state.recipient)&&
                             <div className="chat-col" style={{justifyContent:'center'}}>
                                 <div style={{textAlign:'center'}}>
                                     <h1 className="title_font" style={{color:'black',fontSize:'100px'}}>Chats</h1>
@@ -310,22 +321,24 @@ class Chats extends React.Component {
                                 </div>
                             </div>                    
                         }
-                        {(this.state.recipient && this.state.menu=="Chats") &&
+                        {(this.state.recipient && this.state.menu==="Chats") &&
                             <ChatScreen 
-                                length={this.state.occupants.length} 
                                 name={this.state.recipient}
                                 userid={this.state.user.uid}
+                                data={this.state.chatData}
                             />        
                         }
-                        {this.state.menu=="Status" &&
-                            <StoryScreen/>
+                        {this.state.menu==="Status" &&
+                            <StoryScreen
+                                uid = {this.state.user.uid}
+                            />
                         }
-                        {this.state.menu=="Add Friends" &&
+                        {this.state.menu==="Add Friends" &&
                             <FriendScreen
                                 uid = {this.state.user.uid}
                             />
                         }
-                        {this.state.menu=="Settings" &&
+                        {this.state.menu==="Settings" &&
                             <SettingScreen uid = {this.state.user.uid} menu={this.state.settingsMenu}/>
                         }
                     </div>

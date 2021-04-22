@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from "react-router-dom";
 import firebase from '../../config/firebase'
 import '../../App.css';
-import QR from '../assets/qrcode.png'; 
+// import QR from '../assets/qrcode.png'; 
 
 class Login extends React.Component {
 
@@ -22,12 +22,12 @@ class Login extends React.Component {
     login = () =>{
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
         .then((userCredential) => {
-            var user = userCredential.user;
+            // var user = userCredential.user;
             this.setState({redirect:true})
         })
         .catch((error) => {
-            var errorCode = error.code;
-            var errorMessage = error.message;
+            // var errorCode = error.code;
+            // var errorMessage = error.message;
             console.log(error)
         });
     }

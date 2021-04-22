@@ -53,7 +53,7 @@ class SettingScreen extends React.Component {
         fetch("https://garnet-gregarious-robe.glitch.me/FetchUser?uid="+this.props.uid)
         .then(response => response.json())
         .then(data => {
-            if(data.status==200){
+            if(data.status===200){
                 this.setState({record:data.record,username:data.record.displayName,email:data.record.email})
                 
                 var httpsReference = firebase.storage().ref('dp/'+this.props.uid+'.jpg');  
@@ -61,7 +61,7 @@ class SettingScreen extends React.Component {
                     .then((url) => {this.setState({downloadUrl:url})})
                     .catch((error) => {console.log(error)});
                 }
-            else if(data.status==404){
+            else if(data.status===404){
                 this.setState({error:'User Not Found'})
             }
         });
@@ -103,10 +103,10 @@ class SettingScreen extends React.Component {
         fetch("https://garnet-gregarious-robe.glitch.me/UpdateUser?uid="+this.props.uid+"&displayName="+this.state.username+"&email="+this.state.email)
         .then(response => response.json())
         .then(data => {
-            if(data.status==200){
+            if(data.status===200){
                 this.setState({status:{class:'btn btn-success',text:'Updated'},record:data.record,username:data.record.displayName,email:data.record.email})
             }
-            else if(data.status==404){
+            else if(data.status===404){
                 this.setState({error:'User Not Found'})
             }
         });
@@ -116,12 +116,12 @@ class SettingScreen extends React.Component {
         fetch("https://garnet-gregarious-robe.glitch.me/UpdatePass?uid="+this.props.uid+"&oldPass="+this.state.oldPass+"&newPass="+this.state.newPass)
         .then(response => response.json())
         .then(data => {
-            if(data.status==200){
+            if(data.status===200){
                 console.log("Success")
                 this.setState({PassStatus:{class:'btn btn-success',text:'Updated'}})
 
             }
-            else if(data.status==404){
+            else if(data.status===404){
                 this.setState({error:'User Not Found'})
             }
         });
@@ -137,7 +137,7 @@ class SettingScreen extends React.Component {
                 </div>
                 }
 
-                {this.props.menu=="Edit" &&
+                {this.props.menu==="Edit" &&
                     <div className="update-form">
                         <div style={{textAlign:'center'}}>
                             <img id="UserDP" alt="DP" className="updateDP" src={this.state.downloadUrl} />
@@ -172,7 +172,7 @@ class SettingScreen extends React.Component {
                 }
 
                 {/* Password */}
-                {this.props.menu=="password" &&
+                {this.props.menu==="password" &&
                     <div className="update-form">
                         <div className="form-group">
                             <label>Old Password</label>

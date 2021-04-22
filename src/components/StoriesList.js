@@ -3,10 +3,10 @@ import logo from './assets/pew.jpg';
 
 class StoriesList extends React.Component {
 
-    constructor(props)
-    {
-        super(props);
-    }
+    // constructor(props)
+    // {
+    //     super(props);
+    // }
     render(){
         return(
             <div className="col" style={{marginTop:'10px'}}>

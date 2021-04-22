@@ -1,12 +1,8 @@
 import React from 'react';
-import logo from './assets/pew.jpg'; 
+// import logo from './assets/pew.jpg'; 
 
 class SettingsList extends React.Component {
 
-    constructor(props)
-    {
-        super(props);
-    }
     render(){
         return(
             <div className="col" style={{marginTop:'10px'}}>

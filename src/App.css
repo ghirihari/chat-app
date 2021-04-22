@@ -109,6 +109,13 @@
   white-space: 'nowrap';
 }
 
+.add-friends-name{
+  font-size:large;
+  font-family: 'Roboto Slab', serif;
+  overflow: 'hidden';
+  white-space: 'nowrap';
+}
+
 .friends-list-name{
   font-size:xx-large;
   font-family: 'Roboto Slab', serif;
@@ -251,10 +258,32 @@
   background-image: url('components/assets/bg-marble.jpg');
 }
 
+.attach-btn{
+  margin: 5px;
+  display: block;
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+}
+
+.attach-icons{
+  position: absolute;
+  bottom: 75px;
+  right: 60px;
+}
+
 .friend-tile{
   object-fit: cover;
   width: 150px;
   height: 150px;  
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+}
+
+.add-friend-tile{
+  object-fit: cover;
+  width: 100px;
+  height: 100px;  
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
 }
@@ -327,4 +356,15 @@ div::-webkit-scrollbar {
   left: 60px;
   border-radius: 50%;
   height: 45px;
+}
+.map-marker{
+  text-align: center;
+  width: fit-content;
+}
+
+.map-marker-dp{
+  padding: 2px;
+  width:50px;
+  object-fit: cover;
+  border-radius: 50%;
 }

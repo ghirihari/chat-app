@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
-import logo from './assets/pew.jpg'; 
-import plane from './assets/paper-plane.svg'; 
+// import logo from './assets/pew.jpg'; 
+// import plane from './assets/paper-plane.svg'; 
 
 import io from "socket.io-client";
 import MessageList from './MessageList'
@@ -53,7 +53,7 @@ class Room extends React.Component {
           <div className="row" style={{height:'100vh'}}>
             <div className="col-3 contacts_col d-none d-lg-block">
               <div>
-                {/* <div class="username_div">
+                {/* <div className="username_div">
                   <h2>
                     <span className="badge badge-secondary">{this.userid[0]}</span>
                     <label className="username">{this.userid}</label>
@@ -68,7 +68,7 @@ class Room extends React.Component {
                 {/* Chat Title */}
                 <div className="chat-title shadow">
                   <div className="chatDP_frame">
-                    <img className="chatDP"src={logo} />
+                    {/* <img className="chatDP"src={logo} /> */}
                   </div>
                   <div style={{alignSelf: 'center', paddingLeft:'10px'}}>
                     <h5 style={{marginBottom:'0px'}}>{this.roomid}</h5>
@@ -80,7 +80,7 @@ class Room extends React.Component {
                       console.log(item.sender,this.userid)
                       var type = (item.sender!==this.userid)?"left":"right-bubble"
                         return(
-                        <div class={type} key={index}>
+                        <div className={type} key={index}>
                           <div>
                             <div key={index}>
                               <label className="bubble-message-name">{item.sender} · {item.time}</label>
@@ -94,10 +94,10 @@ class Room extends React.Component {
                     })}
                 </div>
                 <div>
-                  <div class="input-group message-input">
-                    <input type="text" class="form-control" style={{height:'50px'}} placeholder="Enter Message" onChange={this.messageTyped}/>
-                    <div class="input-group-append">
-                      <button class="btn btn-primary"  type="button" onClick={this.sendMessage}>Send</button>
+                  <div className="input-group message-input">
+                    <input type="text" className="form-control" style={{height:'50px'}} placeholder="Enter Message" onChange={this.messageTyped}/>
+                    <div className="input-group-append">
+                      <button className="btn btn-primary"  type="button" onClick={this.sendMessage}>Send</button>
                     </div>
                   </div>
                 </div>

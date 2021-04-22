@@ -1,9 +1,9 @@
 import React from 'react';
-import logo from './assets/pew.jpg'; 
-import firebase from '../config/firebase'
 import '../App.css';
 
 function FriendTile(props) {
+    var diff = new Date(new Date().getTime()-props.id.time)
+    let streak = (diff.getUTCDate() - 1); // Gives day count of difference
     return(
         <div className="row messages_list_item shadow">
             <div className="col-4" style={{padding:'0px'}}>
@@ -12,7 +12,7 @@ function FriendTile(props) {
             <div className="col-8" style={{alignSelf:'center'}}>
             <label className="friends-list-name">{props.id.displayName}</label>
             <label className="" style={{display:'block'}}>{props.id.email}</label>
-            <label className="badge badge-pill badge-danger" >{' ♥ 10 Months'}</label>                      
+            <label className="badge badge-pill badge-danger" >{' ♥ '+streak+' Days'}</label>                      
             </div>
         </div>
     );
@@ -21,13 +21,13 @@ function FriendTile(props) {
 function FriendsList(props){    
     if(props.friends)
     {        
-        var friends = []
-        console.log(props.friends)
+        // var friends = []
+        // console.log(props.friends)
         return(
             <div className="row">
                 {props.friends.map((item,index) => {
                     return(
-                        <div className="col">
+                        <div className="col" key={index}>
                             <FriendTile id={item}/>
                         </div>
                     )
@@ -44,6 +44,8 @@ class FriendScreen extends React.Component {
     constructor(props){
         super(props);
         this.state ={
+            friends:[],
+            length:0
         }
     }
     
@@ -51,7 +53,7 @@ class FriendScreen extends React.Component {
         fetch("https://garnet-gregarious-robe.glitch.me/friends?uid="+this.props.uid)
         .then(response => response.json())
         .then(data => {
-            this.setState({friends:data})
+            this.setState({friends:data,length:data.length})
         })
     }
 
@@ -71,7 +73,7 @@ class FriendScreen extends React.Component {
                     </div>
                     <div style={{alignSelf: 'center', paddingLeft:'10px', flexGrow:'1'}}>
                         <h5 className="recepient_name" style={{marginBottom:'0px'}}>Friends List</h5>
-                        <label style={{fontSize:'smaller',marginBottom:'0px'}}>10 Friends</label>
+                        <label style={{fontSize:'smaller',marginBottom:'0px'}}>{this.state.length} Friends</label>
                     </div>
                 </div>   
 

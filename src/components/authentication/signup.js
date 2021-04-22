@@ -1,7 +1,7 @@
 import React from 'react';
 // import io from "socket.io-client";
 import { Redirect } from "react-router-dom";
-import firebase from '../../config/firebase'
+// import firebase from '../../config/firebase'
 import '../../App.css';
 
 class Signup extends React.Component {
