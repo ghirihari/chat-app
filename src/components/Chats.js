@@ -1,14 +1,15 @@
 import React from 'react';
 import '../App.css';
-import logo from './assets/pew.jpg'; 
+// import logo from './assets/pew.jpg'; 
 import MessageList from './MessageList';
 import firebase from '../config/firebase';
 import ChatScreen from '../components/ChatScreen'
-import StoriesList from './StoriesList'
+import PostList from './PostList'
 // import SettingsList from './SettingsList'
 import StoryScreen from './StoryScreen'
 import FriendScreen from './FriendScreen'
 import SettingScreen from './SettingScreen'
+import PostScreen from './PostScreen'
 
 
 class Chats extends React.Component {
@@ -20,20 +21,33 @@ class Chats extends React.Component {
         occupants:[],
         message:null,
         sms:[],
-        fid:'gon@hunter.com',
+        fid:'',
         recipient:null,
         menu:'Chats',
         searched:null,
         error:null,
         friends:null,
         settingsMenu:null,
-        chatData:null
+        chatData:null,
+        wall:null,
+        wallData:null
         }
     } 
-    
+
+    setWall = (item) => {
+        console.log(item)
+        firebase.database().ref('posts/' + item.id).once('value', (snapshot) => {
+            if(snapshot.val())
+            {
+                this.setState({wallData:snapshot.val(),wall:item})
+            }else{
+                this.setState({wallData:'None',wall:item})
+            }
+        });
+    }
     setRec = (item) => {
         // console.log(item)
-        this.setState({recipient:item})
+        this.setState({recipient:item,menu:'Chats'})
     }
 
     logout = () => {
@@ -76,11 +90,26 @@ class Chats extends React.Component {
     }
 
     addFriend = () => {
-        fetch("https://garnet-gregarious-robe.glitch.me/AddFriend?uid="+this.state.uid+"&fid="+this.state.fid)
+        fetch("https://garnet-gregarious-robe.glitch.me/AddFriend?uid="+this.state.user.uid+"&fid="+this.state.searched.uid)
         .then(response => response.json())
         .then(data => {
             if(data.status===200){
-                console.log('Friend Added')
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                today = mm + '/' + dd + '/' + yyyy;
+
+                fetch("https://garnet-gregarious-robe.glitch.me/send?from="+this.state.user.uid+"&to="+this.state.searched.uid+"&message="+'Became Friends on '+today)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status===200){
+                        console.log('Friend Added')
+                    }
+                    else if(data.status===404){
+                        console.error(data)
+                    }
+                });
             }
             else if(data.status===404){
                 this.setState('Error')
@@ -123,14 +152,54 @@ class Chats extends React.Component {
         });
     }
 
+    success = (pos) => {
+        var crd = pos.coords;
+        firebase.database().ref('location/'+this.state.user.uid).set({latitude:crd.latitude, longitude:crd.longitude}) 
+        console.log("Your current position is:");
+        console.log(`Latitude : ${crd.latitude}`);
+        console.log(`Longitude: ${crd.longitude}`);
+        console.log(`More or less ${crd.accuracy} meters.`);
+      }
+      
+    errors = (err) => {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+      }
+    
+    getLocation = () =>{
+        if (navigator.geolocation) {
+            var options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0,
+              };
+            navigator.permissions
+                .query({ name: "geolocation" })
+                .then((result)=> {
+                if (result.state === "granted") {
+                    console.log(result.state);
+                    navigator.geolocation.getCurrentPosition(this.success);
+                } else if (result.state === "prompt") {
+                    navigator.geolocation.getCurrentPosition(this.success, this.errors, options);
+                } else if (result.state === "denied") {
+                    //If denied then you have to show instructions to enable location
+                }
+                result.onchange = function () {
+                    console.log(result.state);
+                };
+                });
+            } else {
+            alert('Sorry Not available!');
+        }
+    }
+
 
     componentDidMount = () => {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setState({user:user})
-                // firebase.database().ref('location/'+user.uid).set({latitude:11.0038555, longitude:76.9567438}) 
                 this.renderFriends(user);
                 this.getChats();
+                this.getLocation()
             } else {
                 this.props.history.push('/login');
             }
@@ -159,7 +228,7 @@ class Chats extends React.Component {
     //   console.log(this.state.occupants)
         if(this.state.user){
             return (
-                <div className="container-fluid">
+                <div className="col">
                 <div className="row" style={{height:'100vh'}}>
                     <div className="col-3 contacts_col d-none d-lg-block">
                     <div>
@@ -198,7 +267,7 @@ class Chats extends React.Component {
                             </div>
 
                             <div className="col icon-box">
-                                <svg onClick={()=>this.setState({menu:'Status',recipient:null})} className="sidebar-icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.032 512.032">
+                                <svg onClick={()=>this.setState({menu:'Friends-Map',recipient:null})} className="sidebar-icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.032 512.032">
                                     <path d="M496.016 224c-8.832 0-16 7.168-16 16v181.184l-128 51.2V304c0-8.832-7.168-16-16-16s-16 7.168-16 16v168.352l-128-51.2V167.648l74.144 29.664c8.096 3.264 17.504-.704 20.8-8.928 3.296-8.192-.704-17.504-8.928-20.8l-95.776-38.336h-.032l-.256-.096a15.87 15.87 0 00-11.872 0l-.288.096h-.032L10.064 193.152A16.005 16.005 0 00.016 208v288c0 5.312 2.656 10.272 7.04 13.248a15.892 15.892 0 008.96 2.752c2.016 0 4.032-.384 5.952-1.152l154.048-61.6 153.76 61.504h.032l.288.128a15.87 15.87 0 0011.872 0l.288-.128h.032L502 446.88c6.016-2.464 10.016-8.32 10.016-14.88V240c0-8.832-7.168-16-16-16zm-336 197.152l-128 51.2V218.816l128-51.2v253.536zM400.016 64c-26.464 0-48 21.536-48 48s21.536 48 48 48 48-21.536 48-48-21.536-48-48-48zm0 64c-8.832 0-16-7.168-16-16s7.168-16 16-16 16 7.168 16 16-7.168 16-16 16z" />
                                     <path d="M400.016 0c-61.76 0-112 50.24-112 112 0 57.472 89.856 159.264 100.096 170.688 3.04 3.36 7.36 5.312 11.904 5.312s8.864-1.952 11.904-5.312C422.16 271.264 512.016 169.472 512.016 112c0-61.76-50.24-112-112-112zm0 247.584c-34.944-41.44-80-105.056-80-135.584 0-44.096 35.904-80 80-80s80 35.904 80 80c0 30.496-45.056 94.144-80 135.584z" />
                                 </svg>
@@ -212,7 +281,7 @@ class Chats extends React.Component {
                             </div>
 
                             <div className="col icon-box">
-                                <svg  className="sidebar-icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 431.972 431.972">
+                                <svg onClick={()=>{this.setState({menu:'Posts'})}} className="sidebar-icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 431.972 431.972">
                                     <path d="M393.146 14.279c-3.713-5.333-8.713-9.233-14.989-11.707A31.606 31.606 0 00365.592.004V0H66.378c-4.377 0-8.562.857-12.56 2.568-6.28 2.472-11.278 6.377-14.989 11.707-3.71 5.33-5.568 11.228-5.568 17.701v368.019c0 6.475 1.858 12.371 5.568 17.706 3.711 5.329 8.709 9.233 14.989 11.704a31.577 31.577 0 0012.56 2.566c8.949 0 16.844-3.142 23.698-9.418l125.91-121.062 125.91 121.065c6.663 6.081 14.562 9.127 23.695 9.127 4.76 0 8.948-.756 12.565-2.279 6.276-2.471 11.276-6.375 14.989-11.711 3.71-5.328 5.564-11.225 5.564-17.699V31.98c.001-6.473-1.857-12.371-5.563-17.701zm-30.98 376.86L241.397 275.224l-25.411-24.264-25.409 24.264L69.809 391.139V36.549h292.357v354.59z" />
                                 </svg>
                             </div>
@@ -231,19 +300,24 @@ class Chats extends React.Component {
                             <label className="sub_Heading" style={{margin:'0px 15px'}}>{this.state.menu}</label>
                         </div>                        
 
-                        {(this.state.menu==="Chats"||this.state.menu==="Status") &&
+                        {(this.state.menu==="Chats"||this.state.menu==="Friends-Map") &&
                             <div>
                                 <MessageList 
                                     users={this.state.occupants} 
                                     type={"request"}
                                     setRec={this.setRec}
+                                    chatData={this.state.chatData}
                                 />
                             </div>
                         }
                         
-                        {/* {this.state.menu==="Status" &&
-                            <StoriesList/>
-                        } */}
+                        {this.state.menu==="Posts" &&
+                            <PostList 
+                                user={this.state.user}
+                                friends={this.state.occupants} 
+                                setWall={this.setWall}
+                            />
+                        }
 
                         {this.state.menu==="Settings" &&
                             <div className="col" style={{marginTop:'10px'}}>
@@ -285,7 +359,7 @@ class Chats extends React.Component {
                                         </div>
                                         <div className="col" style={{alignSelf:'center'}}>
                                             <label className="add-friends-name">{this.state.searched.displayName}</label>
-                                            <button className="btn btn-primary" onClick={this.state.addFriend}>
+                                            <button className="btn btn-primary" onClick={this.addFriend}>
                                                 Add                                            
                                                 <svg className="add-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                                     <path d="M367.57 256.909a260.207 260.207 0 00-30.093-12.081C370.56 219.996 392 180.455 392 136 392 61.01 330.991 0 256 0S120 61.01 120 136c0 44.504 21.488 84.084 54.633 108.911-30.368 9.998-58.863 25.555-83.803 46.069-45.732 37.617-77.529 90.086-89.532 147.743-3.762 18.066.745 36.622 12.363 50.908C25.222 503.847 42.365 512 60.693 512H307c11.046 0 20-8.954 20-20s-8.954-20-20-20H60.693c-8.538 0-13.689-4.766-15.999-7.606-3.989-4.905-5.533-11.29-4.236-17.519 20.755-99.695 108.691-172.521 210.24-174.977a137.229 137.229 0 0010.656-.002c31.12.73 61.05 7.832 89.044 21.14 9.977 4.74 21.907.499 26.649-9.478 4.742-9.976.5-21.907-9.477-26.649zm-106.692-25.032a260.16 260.16 0 00-9.718.002C200.465 229.35 160 187.312 160 136c0-52.935 43.065-96 96-96s96 43.065 96 96c0 51.299-40.445 93.329-91.122 95.877z" />
@@ -312,7 +386,7 @@ class Chats extends React.Component {
                     </div>
                 </div>
 
-                    <div className="col-lg-9 col-md-12" style={{padding:'0px'}}>
+                    <div className="col-9" style={{padding:'0px'}}>
                         {(this.state.menu==="Chats" && !this.state.recipient)&&
                             <div className="chat-col" style={{justifyContent:'center'}}>
                                 <div style={{textAlign:'center'}}>
@@ -328,7 +402,7 @@ class Chats extends React.Component {
                                 data={this.state.chatData}
                             />        
                         }
-                        {this.state.menu==="Status" &&
+                        {this.state.menu==="Friends-Map" &&
                             <StoryScreen
                                 uid = {this.state.user.uid}
                             />
@@ -336,6 +410,13 @@ class Chats extends React.Component {
                         {this.state.menu==="Add Friends" &&
                             <FriendScreen
                                 uid = {this.state.user.uid}
+                            />
+                        }
+                        {this.state.menu==="Posts" &&
+                            <PostScreen
+                                uid = {this.state.user.uid}
+                                wall = {this.state.wall}
+                                wallData = {this.state.wallData}
                             />
                         }
                         {this.state.menu==="Settings" &&

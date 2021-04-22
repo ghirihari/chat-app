@@ -117,10 +117,9 @@
 }
 
 .friends-list-name{
-  font-size:xx-large;
+  font-size:x-large;
   font-family: 'Roboto Slab', serif;
-  overflow: 'hidden';
-  white-space: 'nowrap';
+  
 }
 
 
@@ -161,6 +160,7 @@
 }
 
 .messages_list_item{
+  cursor: pointer;
   background-color: white;
   padding: 10px;
   margin: 7px 0px 0px 0px;
@@ -189,7 +189,7 @@
 
 
 .time{
-  text-align: end;
+  /* text-align: end; */
   font-size: smaller;
 }
 .online{
@@ -368,3 +368,47 @@ div::-webkit-scrollbar {
   object-fit: cover;
   border-radius: 50%;
 }
+
+.post{
+  flex-grow: 0;
+  width: 329.5px;
+  height: 373px;
+  margin: 10px 6px 0px 6px;
+  background-color: white;
+  border-radius: 5px;
+  padding: 0px;
+}
+
+.post-image-container{
+  width: 329.5px;
+  height: 332px;
+  position: relative;
+  text-align: center;
+}
+
+.post-image-text{
+    color: white;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.post-image{
+  width: inherit;
+  height: inherit;
+  object-fit: cover;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+}
+
+.parent {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  height: 250px;
+  width: 100%;
+  }
+
+  .post-caption{
+      margin: 10px 0px 10px 10px;
+  }

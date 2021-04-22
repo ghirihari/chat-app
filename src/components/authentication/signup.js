@@ -84,10 +84,10 @@ class Signup extends React.Component {
                     <input className="form-control" placeholder="Password" onChange={this.passTyped}/>
                 </div>
 
-                <div className="form-group">
+                {/* <div className="form-group">
                   <input hidden id="icon-button-file" type="file" onChange={this.fileUpload}/>
                   <label className="form-control btn btn-outline-secondary" htmlFor="icon-button-file">Upload Display Picture</label>
-                </div>
+                </div> */}
 
                 <div className="form-group">
                   <button className="form-control btn btn-primary" onClick={this.register}>{this.state.status}</button>

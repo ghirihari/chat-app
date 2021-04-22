@@ -90,6 +90,7 @@ class ChatScreen extends React.Component {
                         </div> */}
                     </div>   
                     {/* Messages */}
+                    
                     <div className="chat-messages">
                         {Object.entries(this.props.data[this.props.name.id]).map((item,index) => {
                             let data = item[1]
@@ -113,6 +114,7 @@ class ChatScreen extends React.Component {
                             ref={(el) => { this.messagesEnd = el; }}>
                         </div>
                     </div>
+                    
                     <div>
                         {this.state.attachment &&
                             <div className="attach-icons">

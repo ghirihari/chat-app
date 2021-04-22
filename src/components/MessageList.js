@@ -3,9 +3,7 @@ import React from 'react';
 // import logo from './assets/pew.jpg'; 
 
 class MessageList extends React.Component {
-
     render(){
-        // console.log(this.props.users)
         return(
             <div className="col-12 messages_list_group">
                 {/* <div className="row messages_list_item shadow staff">
@@ -31,24 +29,23 @@ class MessageList extends React.Component {
 
             <div className="messages-list">
                  {this.props.users.map((item,index) => {
+                     var len = Object.entries(this.props.chatData[item.id]).length;
+                     var text = Object.entries(this.props.chatData[item.id])[len-1][1].text;
+                     if(text.length>35)
+                        text = text.slice(0,35)+'...'
                     return(
                         <div id={item.id} onClick={()=>this.props.setRec(item)} className={"row messages_list_item shadow "} key={index}>
                             <div className="col-2" style={{padding:'0px'}}>
                                 <img alt="DP" className="listDP"src={item.displayPicture} />
-                                {/* <div className="online">
-                                    <svg height="20" width="20">
-                                    <circle cx="10" cy="10" r="7" stroke="white" stroke-width="2"  fill="#228B22" />
-                                    </svg>
-                                </div> */}
                             </div>
                             <div className="col-10" style={{alignSelf:'center'}}>
                                 <div className="row">
                                     <div className="col-12">  
                                         <p className="message-list-name">{item.displayName}</p>
                                     </div>
-                                    <div className="col-4">
+                                    <div className="col">
                                         <div className="time">
-                                            <p style={{marginBottom:'0px'}}>12:30AM</p>
+                                            <p style={{marginBottom:'0px'}}>{text}</p>
                                         </div>
                                     </div>
                                 </div>

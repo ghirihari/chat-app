@@ -2,8 +2,12 @@ import React from 'react';
 import '../App.css';
 
 function FriendTile(props) {
-    var diff = new Date(new Date().getTime()-props.id.time)
-    let streak = (diff.getUTCDate() - 1); // Gives day count of difference
+    var streak = 0;
+    var today = new Date();
+    var date = new Date(props.id.time);
+    var difference_ms = today.getTime() - date.getTime();      
+    streak = Math.round(difference_ms/(1000 * 3600 * 24));
+
     return(
         <div className="row messages_list_item shadow">
             <div className="col-4" style={{padding:'0px'}}>
@@ -21,13 +25,11 @@ function FriendTile(props) {
 function FriendsList(props){    
     if(props.friends)
     {        
-        // var friends = []
-        // console.log(props.friends)
         return(
             <div className="row">
                 {props.friends.map((item,index) => {
                     return(
-                        <div className="col" key={index}>
+                        <div className="col-6" key={item.id}>
                             <FriendTile id={item}/>
                         </div>
                     )
@@ -35,7 +37,7 @@ function FriendsList(props){
             </div>
         )    
     }else{
-        return(<>Hi</>)
+        return(<>Loading</>)
     }
 }
 

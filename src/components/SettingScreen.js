@@ -133,7 +133,6 @@ class SettingScreen extends React.Component {
                 {!this.props.menu &&
                 <div style={{textAlign:'center'}}>
                     <h1 className="title_font" style={{color:'black',fontSize:'100px'}}>Settings</h1>
-                    <h2 style={{fontSize:'20px',marginTop:'-25px',fontStyle:'italic'}}>Click a friend to view his Stories</h2>
                 </div>
                 }
 
