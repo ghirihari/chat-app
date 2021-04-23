@@ -17,7 +17,9 @@ class SettingScreen extends React.Component {
             oldPass:null,
             newPass:null,
             status:{text:'Update',class:'btn btn-primary'},
-            PassStatus:{text:'Change Password',class:'btn btn-danger'}
+            PassStatus:{text:'Change Password',class:'btn btn-danger'},
+            dpStatus:'Change Profile Picture',
+            dpClass:'btn btn-warning'
         }
     }
 
@@ -72,6 +74,7 @@ class SettingScreen extends React.Component {
     }
     
     fileUpload = (e) => {
+        this.setState({dpStatus:"Uploading"})
         let file = e.target.files[0];
         
         this.getBase64(file, (result) => {
@@ -89,9 +92,10 @@ class SettingScreen extends React.Component {
             uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                 firebase.auth().currentUser.updateProfile({
                     photoURL: downloadURL
-                  }).then(function() {
+                  }).then(() => {
                     console.log('Saved at',downloadURL)
-                }).catch(function(error) {
+                    this.setState({dpStatus:"Uploaded",dpClass:"btn btn-success"})
+                }).catch((error) => {
                     console.log('error',error)
                 });
             });
@@ -142,10 +146,8 @@ class SettingScreen extends React.Component {
                             <img id="UserDP" alt="DP" className="updateDP" src={this.state.downloadUrl} />
                             <div>
                                 <input hidden id="icon-button-file" type="file" onChange={this.fileUpload}/>
-                                <label htmlFor="icon-button-file" className="btn btn-warning upload-on-image">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style={{width:'20px'}}>
-                                        <path d="M51.2 353.28L0 512l158.72-51.2zM87.16 316.492L336.96 66.69l108.61 108.61L195.77 425.102zM504.32 79.36L432.64 7.68c-10.24-10.24-25.6-10.24-35.84 0l-23.04 23.04 107.52 107.52 23.04-23.04c10.24-10.24 10.24-25.6 0-35.84z" />
-                                    </svg>
+                                <label htmlFor="icon-button-file" className={this.state.dpClass} style={{marginTop:'10px'}}>
+                                    {this.state.dpStatus}
                                 </label>
                             </div>
                         </div>

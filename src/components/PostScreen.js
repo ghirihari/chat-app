@@ -34,6 +34,7 @@ class PostScreen extends React.Component {
                         {Object.entries(this.props.wallData).map((item,index)=>{
                             return(
                                 <PostTile
+                                    key = {item[1].image}
                                     postURL={item[1].image}
                                     time={item[1].time}
                                     name={this.props.wall.displayName}

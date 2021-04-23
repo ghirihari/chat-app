@@ -3,7 +3,7 @@ import React from 'react';
 // import { Redirect } from "react-router-dom";
 import firebase from '../config/firebase'
 import '../App.css';
-
+import tone from './assets/Tone.mp3'
 class ChatScreen extends React.Component {
 
     constructor(props){
@@ -11,6 +11,7 @@ class ChatScreen extends React.Component {
         this.state ={
             message:'',
             messages:[],
+            sent:false
         }
     }
 
@@ -23,6 +24,7 @@ class ChatScreen extends React.Component {
       }
   
     sendMessage = () => {
+        this.setState({sent:true})
         fetch("https://garnet-gregarious-robe.glitch.me/send?from="+this.props.userid+"&to="+this.props.name.id+"&message="+this.state.message)
         .then(response => response.json())
         .then(data => {
@@ -56,18 +58,31 @@ class ChatScreen extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        if(prevProps.data != this.props.data)
+        {
+            console.log('sent',this.state.sent)
+            if(this.state.sent==true)
+            {
+                this.setState({sent:false})
+            }else{
+                this.audioEl.play();
+            }
+        }
         this.scrollToBottom();
     }
     
     
     componentDidMount = () => {
-        // this.ren()
+        this.audioEl = document.getElementById('tone')
     }
 
     render(){
 
             return(
                 <div className="chat-col">
+                    <audio id="tone" className="audio-element">
+                            <source src={tone}></source>
+                    </audio>
                     {/* Chat Title */}
                     <div className="chat-title shadow" style={{display:'flex', alignItems:'center'}}>
                         <div className="chatDP_frame">

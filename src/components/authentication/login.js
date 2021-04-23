@@ -12,6 +12,9 @@ class Login extends React.Component {
             email:null,
             pass:null,
             redirect:false,
+            btnStatus: 'Log in',
+            btnClass:' btn btn-primary',
+            error:null
         }
     }
 
@@ -20,6 +23,7 @@ class Login extends React.Component {
 
 
     login = () =>{
+        this.setState({btnStatus:'Logging in',btnClass:'btn btn-success',error:null})
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
         .then((userCredential) => {
             // var user = userCredential.user;
@@ -28,7 +32,9 @@ class Login extends React.Component {
         .catch((error) => {
             // var errorCode = error.code;
             // var errorMessage = error.message;
-            console.log(error)
+            // console.log(error)
+            this.setState({btnStatus:'Log in',btnClass:'btn btn-primary'})
+            this.setState({error:error})
         });
     }
 
@@ -45,7 +51,7 @@ class Login extends React.Component {
         <div className="container join-form">
             <div className="col-lg-4 col-sm-12">
                 <div style={{textAlign:'center'}}>
-                  <h1 className="title_font">Chatter</h1>
+                  <h1 className="title_font">Instance</h1>
                 </div>
                 <div className="form-group">
                     <input className="form-control login-input-field" placeholder="Username" onChange={this.emailTyped}/>
@@ -55,8 +61,14 @@ class Login extends React.Component {
                     <input type="password" className="form-control login-input-field" placeholder="Password" onChange={this.passTyped}/>
                 </div>
 
+                {this.state.error &&
+                  <div className="form-group error-card">
+                    <p className="paragraphs">{this.state.error.message}</p>
+                  </div>
+                }
+
                 <div className="form-group">
-                  <button className="form-control btn btn-primary" onClick={this.login}>Log in</button>
+                  <button className={"form-control "+this.state.btnClass} onClick={this.login}>{this.state.btnStatus}</button>
                 </div>
 
                 <div className="form-group signup-card">

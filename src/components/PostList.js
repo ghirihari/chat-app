@@ -7,7 +7,8 @@ class PostList extends React.Component {
     constructor(){
         super()
         this.state = {
-            btnState:"Add Post"
+            btnState:"Add Post",
+            btnClass:'btn btn-dark'
         }
     }
     getBase64(file, cb) {
@@ -23,7 +24,7 @@ class PostList extends React.Component {
 
 
     fileUpload = (e) => {
-        this.setState({btnState:'Uploading'})
+        this.setState({btnState:'Uploading',btnClass:'btn btn-warning'})
         let file = e.target.files[0];
         this.getBase64(file, (result) => {
             console.log('base64 Loaded');
@@ -45,7 +46,7 @@ class PostList extends React.Component {
                         time:new Date().getTime()
                     }).then(()=>{
                         console.log('Saved at',downloadURL)
-                        this.setState({btnState:'Uploaded'})
+                        this.setState({btnState:'Uploaded',btnClass:'btn btn-success'})
                     })
             });
         }
@@ -72,7 +73,11 @@ class PostList extends React.Component {
                         </div>
                         <div id={this.props.user.uid} onClick={()=>{this.setMe()}} className={"row messages_list_item shadow "} key={this.props.user.id}>
                                     <div className="col-2" style={{padding:'0px'}}>
-                                        <img alt="DP" className="listDP"src={this.props.user.photoURL} />
+                                        {this.props.user.photoURL ?
+                                            <img alt="DP" className="listDP"src={this.props.user.photoURL} />
+                                            :
+                                            <img alt="DP" className="listDP"src={logo} />
+                                        }
                                     </div>
                                     <div className="col" style={{alignSelf:'center'}}>
                                         <div className="row">

@@ -14,7 +14,8 @@ class Signup extends React.Component {
         pass:null,
         room:'',
         redirect:false,
-        status:'Register'
+        btnStatus:'Register',
+        btnClass:'btn btn-primary'
         }
     }
 
@@ -37,10 +38,17 @@ class Signup extends React.Component {
 
     //https://garnet-gregarious-robe.glitch.me/register/?email=mikasa@titans.com&pass=mikasaeren&username=Mikasa%20Ackerman
     register = () =>{
-      this.setState({status:'Registering'})
+      this.setState({btnStatus:'Registering',btnClass:'btn-success'})
       fetch("https://garnet-gregarious-robe.glitch.me/register/?email="+this.state.email+"&pass="+this.state.pass+"&username="+this.state.username)
       .then(response => response.json())
-      .then(data => this.setState({status:data.message}));
+      .then(data => {
+        if(data.status==500){
+          this.setState({error:data.message})
+          this.setState({btnStatus:'Register',btnClass:'btn-primary'})
+        }else if(data.status==200){
+          this.setState({btnStatus:'Registered',btnClass:'btn-success'})
+        }
+      });
     }
 
     fileUpload = (e) => {
@@ -62,16 +70,16 @@ class Signup extends React.Component {
   }
 
   render(){
-    if(this.state.redirect)
+    if(this.state.btnStatus=='Registered')
     {
-      return <Redirect to={"/room/"+this.state.room+'/'+this.state.username} />
+      return <Redirect to={"/chats"} />
     }
     else{
       return (
         <div className="container join-form">
             <div className="col-lg-4 col-sm-12">
                 <div style={{textAlign:'center'}}>
-                  <h1 className="title_font">Chatter</h1>
+                  <h1 className="title_font">Instance</h1>
                 </div>
 
                 <div className="form-group">
@@ -84,13 +92,14 @@ class Signup extends React.Component {
                     <input className="form-control" placeholder="Password" onChange={this.passTyped}/>
                 </div>
 
-                {/* <div className="form-group">
-                  <input hidden id="icon-button-file" type="file" onChange={this.fileUpload}/>
-                  <label className="form-control btn btn-outline-secondary" htmlFor="icon-button-file">Upload Display Picture</label>
-                </div> */}
+                {this.state.error &&
+                  <div className="form-group error-card">
+                    <p className="paragraphs">{this.state.error.message}</p>
+                  </div>
+                }
 
                 <div className="form-group">
-                  <button className="form-control btn btn-primary" onClick={this.register}>{this.state.status}</button>
+                  <button className={"form-control "+this.state.btnClass} onClick={this.register}>{this.state.btnStatus}</button>
                 </div>
 
                 <div className="form-group signup-card">

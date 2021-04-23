@@ -30,7 +30,9 @@ class Chats extends React.Component {
         settingsMenu:null,
         chatData:null,
         wall:null,
-        wallData:null
+        wallData:null,
+        addFriendStatus:"Add",
+        addFriendClass:"btn btn-primary"
         }
     } 
 
@@ -104,6 +106,7 @@ class Chats extends React.Component {
                 .then(response => response.json())
                 .then(data => {
                     if(data.status===200){
+                        this.setState({addFriendStatus:'Added',addFriendClass:'btn btn-success'})
                         console.log('Friend Added')
                     }
                     else if(data.status===404){
@@ -117,14 +120,23 @@ class Chats extends React.Component {
         });
     }
 
-    
+    occupantDupe = (uid) =>
+    {
+        for(var i = 0; i < this.state.occupants.length; i++)
+        {
+            if(this.state.occupants[i].id == uid)
+            {
+                return 1;
+            }
+        }
+        return 0
+    }
 
     renderFriends = (user) => {
         var chats = firebase.database().ref('users/' + user.uid + '/friends');
         chats.on('value', (snapshot) => {
             if(snapshot.val())
             {
-                
                 let data = snapshot.val();
                 let fid = Object.entries(data);
                 for (var i in fid){
@@ -132,7 +144,9 @@ class Chats extends React.Component {
                         .then(response => response.json())
                         .then(data => {
                             if(data.status===200){
-                                this.setState({occupants:this.state.occupants.concat({id:data.record.uid, displayName:data.record.displayName, displayPicture:data.record.photoURL})})
+                                if(!this.occupantDupe(data.record.uid)){
+                                    this.setState({occupants:this.state.occupants.concat({id:data.record.uid, displayName:data.record.displayName, displayPicture:data.record.photoURL})})
+                                }
                             }
                             else if(data.status===404){
                                 console.log('error')
@@ -240,7 +254,7 @@ class Chats extends React.Component {
                             <button className="btn btn-outline-danger float-right" onClick={this.logout}>Logout</button>
                         </div> */}
                          <div style={{textAlign:'center'}}>
-                  <h1 className="title_font">Chatter</h1>
+                  <h1 className="title_font">Instance</h1>
                 </div>
                
                         {/* <div className="messages_list_group">
@@ -359,8 +373,8 @@ class Chats extends React.Component {
                                         </div>
                                         <div className="col" style={{alignSelf:'center'}}>
                                             <label className="add-friends-name">{this.state.searched.displayName}</label>
-                                            <button className="btn btn-primary" onClick={this.addFriend}>
-                                                Add                                            
+                                            <button className={this.state.addFriendClass} onClick={this.addFriend}>
+                                                {this.state.addFriendStatus}                                            
                                                 <svg className="add-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                                     <path d="M367.57 256.909a260.207 260.207 0 00-30.093-12.081C370.56 219.996 392 180.455 392 136 392 61.01 330.991 0 256 0S120 61.01 120 136c0 44.504 21.488 84.084 54.633 108.911-30.368 9.998-58.863 25.555-83.803 46.069-45.732 37.617-77.529 90.086-89.532 147.743-3.762 18.066.745 36.622 12.363 50.908C25.222 503.847 42.365 512 60.693 512H307c11.046 0 20-8.954 20-20s-8.954-20-20-20H60.693c-8.538 0-13.689-4.766-15.999-7.606-3.989-4.905-5.533-11.29-4.236-17.519 20.755-99.695 108.691-172.521 210.24-174.977a137.229 137.229 0 0010.656-.002c31.12.73 61.05 7.832 89.044 21.14 9.977 4.74 21.907.499 26.649-9.478 4.742-9.976.5-21.907-9.477-26.649zm-106.692-25.032a260.16 260.16 0 00-9.718.002C200.465 229.35 160 187.312 160 136c0-52.935 43.065-96 96-96s96 43.065 96 96c0 51.299-40.445 93.329-91.122 95.877z" />
                                                     <path d="M492 397h-55v-55c0-11.046-8.954-20-20-20s-20 8.954-20 20v55h-55c-11.046 0-20 8.954-20 20s8.954 20 20 20h55v55c0 11.046 8.954 20 20 20s20-8.954 20-20v-55h55c11.046 0 20-8.954 20-20s-8.954-20-20-20z" />
