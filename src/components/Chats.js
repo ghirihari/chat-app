@@ -124,7 +124,7 @@ class Chats extends React.Component {
     {
         for(var i = 0; i < this.state.occupants.length; i++)
         {
-            if(this.state.occupants[i].id == uid)
+            if(this.state.occupants[i].id === uid)
             {
                 return 1;
             }
@@ -164,6 +164,15 @@ class Chats extends React.Component {
             this.setState({chatData:snapshot.val()})
             console.log('On',snapshot.val())
         });
+        chats.on('child_changed', (data) => {
+            let rec_id = this.state.recipient ? this.state.recipient.id : null;
+            if(data.key !== rec_id){
+                console.log('Message Received')
+                document.getElementById('message-list-'+data.key).classList.add('gradient')
+            }
+            console.log('child_changed',data.key, data.val());
+        });
+          
     }
 
     success = (pos) => {
@@ -239,7 +248,7 @@ class Chats extends React.Component {
 
    
   render(){
-    //   console.log(this.state.occupants)
+    //   console.log(this.state.recipient)
         if(this.state.user){
             return (
                 <div className="col">
@@ -395,8 +404,6 @@ class Chats extends React.Component {
 
                         </>
                         }
-
-
                     </div>
                 </div>
 

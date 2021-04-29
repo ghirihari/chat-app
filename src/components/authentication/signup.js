@@ -42,10 +42,10 @@ class Signup extends React.Component {
       fetch("https://garnet-gregarious-robe.glitch.me/register/?email="+this.state.email+"&pass="+this.state.pass+"&username="+this.state.username)
       .then(response => response.json())
       .then(data => {
-        if(data.status==500){
+        if(data.status===500){
           this.setState({error:data.message})
           this.setState({btnStatus:'Register',btnClass:'btn-primary'})
-        }else if(data.status==200){
+        }else if(data.status===200){
           this.setState({btnStatus:'Registered',btnClass:'btn-success'})
         }
       });
@@ -70,7 +70,7 @@ class Signup extends React.Component {
   }
 
   render(){
-    if(this.state.btnStatus=='Registered')
+    if(this.state.btnStatus==='Registered')
     {
       return <Redirect to={"/chats"} />
     }

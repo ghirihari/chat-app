@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './assets/pew.jpg'; 
+// import logo from './assets/pew.jpg'; 
 
 function PostTile(props) {
     var date = new Date(props.time);
@@ -14,7 +14,7 @@ function PostTile(props) {
                 <label style={{display:'block',textAlign:'center'}}>{'@'+props.name}</label>
             </div>
             <div className="post-caption">
-                <label style={{display:'block',textAlign:'center'}}>April 23,2021</label>
+                <label style={{display:'block',textAlign:'center'}}>{time}</label>
             </div>
         </div>
     );
@@ -29,7 +29,7 @@ class PostScreen extends React.Component {
                     <h1 className="title_font" style={{color:'black',fontSize:'100px'}}>Posts</h1>
                 </div>
                 }
-                {(this.props.wallData&&this.props.wallData!='None') &&
+                {(this.props.wallData&&this.props.wallData!=='None') &&
                    <div className="row">
                         {Object.entries(this.props.wallData).map((item,index)=>{
                             return(
@@ -43,7 +43,7 @@ class PostScreen extends React.Component {
                         })}
                    </div>
                 }
-                {this.props.wallData=='None' &&
+                {this.props.wallData==='None' &&
                     <div style={{textAlign:'center'}}>
                         <h1 className="title_font" style={{color:'black',fontSize:'100px'}}>No Posts</h1>
                     </div>
