@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2daceff6.chunk.css",
+    "main.js": "/static/js/main.37d891c6.chunk.js",
+    "main.js.map": "/static/js/main.37d891c6.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.190195a8.js",
+    "runtime-main.js.map": "/static/js/runtime-main.190195a8.js.map",
+    "static/js/2.dcaa236b.chunk.js": "/static/js/2.dcaa236b.chunk.js",
+    "static/js/2.dcaa236b.chunk.js.map": "/static/js/2.dcaa236b.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.2daceff6.chunk.css.map": "/static/css/main.2daceff6.chunk.css.map",
+    "static/js/2.dcaa236b.chunk.js.LICENSE.txt": "/static/js/2.dcaa236b.chunk.js.LICENSE.txt",
+    "static/media/Tone.f4570310.mp3": "/static/media/Tone.f4570310.mp3",
+    "static/media/App.css": "/static/media/bg-marble.9b90bc99.jpg",
+    "static/media/pew.bbd2dc17.jpg": "/static/media/pew.bbd2dc17.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.190195a8.js",
+    "static/js/2.dcaa236b.chunk.js",
+    "static/css/main.2daceff6.chunk.css",
+    "static/js/main.37d891c6.chunk.js"
+  ]
+}
