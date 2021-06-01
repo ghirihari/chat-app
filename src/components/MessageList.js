@@ -15,6 +15,7 @@ class MessageList extends React.Component {
         this.setState({selected:item})
         this.props.setRec(item)
     }
+
     render(){
         // console.log(this.props.users)
         return(
@@ -29,11 +30,11 @@ class MessageList extends React.Component {
                         var len = Object.entries(this.props.chatData[item.id]).length;
                         var text = Object.entries(this.props.chatData[item.id])[len-1][1].text;
                         var message_class = "row messages_list_item shadow";
-                        if(this.state.selected){
-                            if(item.id === this.state.selected.id){
-                                message_class += " selected"
-                            }
-                        }
+                        // if(this.state.selected){
+                        //     if(item.id === this.state.selected.id){
+                        //         message_class += " selected"
+                        //     }
+                        // }
                         if(text.length>35)
                             text = text.slice(0,35)+'...'
                         return(

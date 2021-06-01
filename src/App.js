@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import Join from './components/Join'
 import Room from './components/Room'
 import Signup from './components/authentication/signup'
@@ -13,6 +13,9 @@ class App extends React.Component {
   return (
     <Router>
       <Switch>
+        <Route exact path="/">
+            <Redirect to="/login" />
+        </Route>
         <Route path='/join' component={Join}/>
         <Route path='/signup' component={Signup}/>
         <Route path='/login' component={login}/>

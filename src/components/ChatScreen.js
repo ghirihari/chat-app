@@ -84,14 +84,20 @@ class ChatScreen extends React.Component {
                             <source src={tone}></source>
                     </audio>
                     {/* Chat Title */}
-                    <div className="chat-title shadow" style={{display:'flex', alignItems:'center'}}>
+                    <div className="chat-title shadow" style={{display: 'flex',alignItems: 'center',justifyContent: 'center'}}>
+                        <div onClick={()=>this.props.unSetRec()}>
+                            <svg className="sidebar-icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492 492" >
+                                <path d="M198.608 246.104L382.664 62.04c5.068-5.056 7.856-11.816 7.856-19.024 0-7.212-2.788-13.968-7.856-19.032l-16.128-16.12C361.476 2.792 354.712 0 347.504 0s-13.964 2.792-19.028 7.864L109.328 227.008c-5.084 5.08-7.868 11.868-7.848 19.084-.02 7.248 2.76 14.028 7.848 19.112l218.944 218.932c5.064 5.072 11.82 7.864 19.032 7.864 7.208 0 13.964-2.792 19.032-7.864l16.124-16.12c10.492-10.492 10.492-27.572 0-38.06L198.608 246.104z" />
+                            </svg>
+                        </div>
+
                         <div className="chatDP_frame">
                             <img alt="DP" className="chatDP"src={this.props.name.displayPicture} />
                         </div>
-                        <div style={{alignSelf: 'center', paddingLeft:'10px', flexGrow:'1'}}>
+                        <div style={{display:'block',alignSelf: 'center', paddingLeft:'10px', flexGrow:'1'}}>
                             <h5 className="recepient_name" style={{marginBottom:'0px'}}>{this.props.name.displayName}</h5>
-                            <label style={{fontSize:'smaller',marginBottom:'0px'}}>Online</label>
                         </div>
+
                         {/* <div style={{alignSelf: 'center', padding:'20px'}}>
                             <div className="btn-group dropleft">
                                 <button type="button" className="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -131,7 +137,7 @@ class ChatScreen extends React.Component {
                     </div>
                     
                     <div>
-                        {this.state.attachment &&
+                        {/* {this.state.attachment &&
                             <div className="attach-icons">
                                 <button className="btn attach-btn btn-light">
                                     <svg height={30} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -157,18 +163,18 @@ class ChatScreen extends React.Component {
                                     </svg>
                                 </button>
                             </div>
-                        }
+                        } */}
                        
                         <div className="input-group message-input">
                             <input type="text" className="form-control" style={{height:'50px'}} placeholder="Enter Message" value={this.state.message} onChange={this.messageTyped}/>
-                            <div className="input-group-append">
+                            {/* <div className="input-group-append">
                                 <button className="btn btn-white"  type="button" onClick={()=>this.setState({attachment:!this.state.attachment})}>
                                     <svg fill="black" height={30} data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                         >
                                         <path d="M12.76 19.94A5.49 5.49 0 015 12.18l8.76-8.75a3.72 3.72 0 016.34 2.63A3.68 3.68 0 0119 8.68L10.67 17a1.36 1.36 0 01-1.92-1.9l8.34-8.34-1.42-1.41-8.34 8.34a3.36 3.36 0 004.75 4.75l8.35-8.34A5.72 5.72 0 0012.34 2l-8.76 8.77a7.49 7.49 0 0010.59 10.59l7.92-7.93L20.68 12z" />
                                     </svg>
                                 </button>
-                            </div>
+                            </div> */}
 
                             <div className="input-group-append">
                                 <button className="btn btn-white"  type="button" onClick={this.sendMessage}>

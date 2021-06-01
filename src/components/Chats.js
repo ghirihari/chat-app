@@ -32,7 +32,9 @@ class Chats extends React.Component {
         wall:null,
         wallData:null,
         addFriendStatus:"Add",
-        addFriendClass:"btn btn-primary"
+        addFriendClass:"btn btn-primary",
+        ChatScreenClass:"col-lg-9 d-none d-lg-block",
+        MessageListClass:"col-lg-3 col-sm-12 contacts_col"
         }
     } 
 
@@ -47,11 +49,25 @@ class Chats extends React.Component {
             }
         });
     }
+
     setRec = (item) => {
-        // console.log(item)
-        this.setState({recipient:item,menu:'Chats'})
+        this.setState(
+            {
+                recipient:item,
+                menu:'Chats',
+                ChatScreenClass:"col-lg-9",
+                MessageListClass:"col-lg-3 col-sm-12 contacts_col d-none d-lg-block"
+            })
     }
 
+    unSetRec = () => {
+        this.setState({
+            recipient:null,
+            menu:'Chats',
+            ChatScreenClass:"col-lg-9 d-none d-lg-block",
+            MessageListClass:"col-lg-3 col-sm-12 contacts_col"    
+        })
+    }
     logout = () => {
         firebase.auth().signOut().then(function() {
             // Sign-out successful.
@@ -135,6 +151,8 @@ class Chats extends React.Component {
     renderFriends = (user) => {
         var chats = firebase.database().ref('users/' + user.uid + '/friends');
         chats.on('value', (snapshot) => {
+            console.log('friends')
+
             if(snapshot.val())
             {
                 let data = snapshot.val();
@@ -143,6 +161,7 @@ class Chats extends React.Component {
                     fetch("https://garnet-gregarious-robe.glitch.me/FetchUser?uid="+fid[i][0])
                         .then(response => response.json())
                         .then(data => {
+                            console.log(data)
                             if(data.status===200){
                                 if(!this.occupantDupe(data.record.uid)){
                                     this.setState({occupants:this.state.occupants.concat({id:data.record.uid, displayName:data.record.displayName, displayPicture:data.record.photoURL})})
@@ -160,6 +179,7 @@ class Chats extends React.Component {
 
     getChats = () => {
         let chats = firebase.database().ref('users/' + this.state.user.uid + '/messages/');
+
         chats.on('value', (snapshot) => {
             this.setState({chatData:snapshot.val()})
             console.log('On',snapshot.val())
@@ -222,7 +242,7 @@ class Chats extends React.Component {
                 this.setState({user:user})
                 this.renderFriends(user);
                 this.getChats();
-                this.getLocation()
+                // this.getLocation()
             } else {
                 this.props.history.push('/login');
             }
@@ -253,7 +273,7 @@ class Chats extends React.Component {
             return (
                 <div className="col">
                 <div className="row" style={{height:'100vh'}}>
-                    <div className="col-3 contacts_col d-none d-lg-block">
+                    <div className={this.state.MessageListClass}>
                     <div>
                         {/* <div className="username_div">
                             <h2 style={{display:'contents'}}>
@@ -262,9 +282,9 @@ class Chats extends React.Component {
                             </h2>
                             <button className="btn btn-outline-danger float-right" onClick={this.logout}>Logout</button>
                         </div> */}
-                         <div style={{textAlign:'center'}}>
-                  <h1 className="title_font">Instance</h1>
-                </div>
+                        <div style={{textAlign:'center'}}>
+                            <h1 className="title_font">Instance</h1>
+                        </div>
                
                         {/* <div className="messages_list_group">
                             <div style={{display:"flex", alignItems:'center'}} className="gradient-0 messages_list_item shadow">
@@ -407,7 +427,7 @@ class Chats extends React.Component {
                     </div>
                 </div>
 
-                    <div className="col-9" style={{padding:'0px'}}>
+                    <div className={this.state.ChatScreenClass} style={{padding:'0px'}}>
                         {(this.state.menu==="Chats" && !this.state.recipient)&&
                             <div className="chat-col" style={{justifyContent:'center'}}>
                                 <div style={{textAlign:'center'}}>
@@ -421,6 +441,7 @@ class Chats extends React.Component {
                                 name={this.state.recipient}
                                 userid={this.state.user.uid}
                                 data={this.state.chatData}
+                                unSetRec={this.unSetRec}
                             />        
                         }
                         {this.state.menu==="Friends-Map" &&

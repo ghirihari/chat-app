@@ -230,7 +230,7 @@
 .chat-title{
   display: flex;
   background-color: white;
-  padding: 5px;
+  padding: 5px 10px;
   border-radius: 0px 20px;
   z-index: 1;
 }
