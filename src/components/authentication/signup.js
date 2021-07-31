@@ -15,7 +15,8 @@ class Signup extends React.Component {
         room:'',
         redirect:false,
         btnStatus:'Register',
-        btnClass:'btn btn-primary'
+        btnClass:'btn btn-primary',
+        login:false
         }
     }
 
@@ -85,6 +86,10 @@ class Signup extends React.Component {
     {
       return <Redirect to={"/chats"} />
     }
+    if(this.state.login)
+    {
+      return <Redirect to={"/login"} />
+    }
     else{
       return (
         <div className="container join-form">
@@ -123,7 +128,8 @@ class Signup extends React.Component {
                       </div>
                     }
                     <div className="form-group signup-card">
-                      <p className="paragraphs">Already a member? </p><a href="/login">Log in</a>
+                      <p className="paragraphs">Already a member? </p>
+                      <a role="button" style={{color: '#0056b3', cursor: 'pointer'}} onClick={()=>this.setState({login:true})}>Log in</a>
                     </div>
 
                   </div>
