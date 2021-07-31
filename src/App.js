@@ -14,7 +14,7 @@ class App extends React.Component {
     <Router>
       <Switch>
         <Route exact path="/">
-            <Redirect to="/login" />
+            <Redirect to="/chats" />
         </Route>
         <Route path='/join' component={Join}/>
         <Route path='/signup' component={Signup}/>

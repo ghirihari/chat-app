@@ -132,12 +132,28 @@ class SettingScreen extends React.Component {
     }
   
     render(){
+        let menu;
+        if(this.props.menu==="Edit")menu = "Edit Profile";
+        else menu="Change Password";
+
         return(
-            <div className="chat-col" style={{justifyContent:'center'}}>
-                {!this.props.menu &&
+            <div className="chat-col" >
+                {!this.props.menu ?
                 <div style={{textAlign:'center'}}>
                     <h1 className="title_font" style={{color:'black',fontSize:'100px'}}>Settings</h1>
                 </div>
+                :
+                // Title
+                <div className="chat-title shadow" style={{display: 'flex',alignItems: 'center',justifyContent: 'center', height: '75px',textAlign: 'center'}}>
+                    <div onClick={()=>this.props.unSetSettings()}>
+                        <svg className="sidebar-icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492 492" >
+                            <path d="M198.608 246.104L382.664 62.04c5.068-5.056 7.856-11.816 7.856-19.024 0-7.212-2.788-13.968-7.856-19.032l-16.128-16.12C361.476 2.792 354.712 0 347.504 0s-13.964 2.792-19.028 7.864L109.328 227.008c-5.084 5.08-7.868 11.868-7.848 19.084-.02 7.248 2.76 14.028 7.848 19.112l218.944 218.932c5.064 5.072 11.82 7.864 19.032 7.864 7.208 0 13.964-2.792 19.032-7.864l16.124-16.12c10.492-10.492 10.492-27.572 0-38.06L198.608 246.104z" />
+                        </svg>
+                    </div>
+                    <div style={{display:'block',alignSelf: 'center', paddingLeft:'10px', flexGrow:'1'}}>
+                        <h5 className="recepient_name" style={{marginBottom:'0px'}}>{menu}</h5>
+                    </div>
+                </div>   
                 }
 
                 {this.props.menu==="Edit" &&
@@ -161,11 +177,6 @@ class SettingScreen extends React.Component {
                         <input type="email" className="form-control"placeholder="Enter email" value={this.state.email} onChange={this.emailTyped}/>
                         <small id="emailHelp" className="form-text text-muted">Should be a valid email address.</small>
                     </div>
-                    {/* <div className="form-group">
-                        <label>Password</label>
-                        <input type="password" className="form-control"placeholder="New Password"/>
-                        <small id="passwordHelp" className="form-text text-muted">Should have more than 8 characters.</small>
-                    </div> */}
                     <div style={{textAlign:'end'}}>
                         <button type="submit" className={this.state.status.class} onClick={this.updateProfile}>{this.state.status.text}</button>
                     </div>

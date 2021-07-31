@@ -25,7 +25,11 @@
 }
 
 .update-form{
-  margin: 0px 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  margin: 0px 10px;
 }
 
 
@@ -65,11 +69,17 @@
 
 .updateDP{
   object-fit: cover;
-  width: 150px;
-  height: 150px;
-  border-radius: 25%;
+  width: 200px;
+  height: 200px;
+  border-radius: 5%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 
+.changeDP{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .listDP2{
@@ -130,6 +140,12 @@
   width: 30px;
   cursor: pointer;
 }
+
+.sidebar-icons:hover{
+  -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+  filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+}
+
 .friend-list-name{
   font-size:large;
   font-family: 'Roboto Slab', serif;
@@ -167,6 +183,10 @@
   margin: 7px 0px 0px 0px;
   border-radius: 10px;
   color: black;
+}
+
+.messages_list_item:hover{
+  background-color: #B9BBB5;
 }
 .selected{
   color: white;
@@ -264,6 +284,7 @@
   height: 100vh;
   width: 100%;
   background-image: url('components/assets/bg-marble.jpg');
+  padding: 0px;
 }
 
 .attach-btn{
@@ -382,7 +403,7 @@ div::-webkit-scrollbar {
   flex-grow: 0;
   width: 329.5px;
   height: 373px;
-  margin: 10px 6px 0px 6px;
+  margin: 5px 0px;
   background-color: white;
   border-radius: 5px;
   padding: 0px;

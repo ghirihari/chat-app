@@ -54,7 +54,7 @@ class Login extends React.Component {
                   <h1 className="title_font">Instance</h1>
                 </div>
                 <div className="form-group">
-                    <input className="form-control login-input-field" placeholder="Username" onChange={this.emailTyped}/>
+                    <input className="form-control login-input-field" placeholder="Email ID" onChange={this.emailTyped}/>
                 </div>
             
                 <div className="form-group">

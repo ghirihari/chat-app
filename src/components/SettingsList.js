@@ -6,14 +6,16 @@ class SettingsList extends React.Component {
     render(){
         return(
             <div className="col" style={{marginTop:'10px'}}>
-                <div>
-                    <button className="btn btn-dark ListButtons">Edit Profile Details</button>
+                    <div>
+                        <button className="btn btn-dark ListButtons" onClick={()=>this.props.setSettings('Edit')}>Edit Profile</button>
+                    </div>
+                    <div>
+                        <button className="btn btn-dark ListButtons" onClick={()=>this.props.setSettings('password')}>Change Password</button>
+                    </div>
+                    <div>
+                        <button className="btn btn-danger ListButtons" onClick={this.props.logout}>Logout</button>
+                    </div>
                 </div>
-
-                <div>
-                    <button className="btn btn-danger ListButtons">Logout</button>
-                </div>
-            </div>
         )
     }
 }
