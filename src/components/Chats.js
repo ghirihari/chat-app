@@ -308,8 +308,7 @@ class Chats extends React.Component {
 
    
   render(){
-    //   console.log(this.state.recipient)
-        if(this.state.user){
+        if(this.state.user && this.state.occupants.length){
             return (
                 <div className="col">
                 <div className="row" style={{height:'100vh'}}>
@@ -510,7 +509,14 @@ class Chats extends React.Component {
             );
         }
         else{
-            return <></>
+            return(
+                <div className="LoadingPage">
+                    <div className="loading">
+                        <div class="loader"></div>
+                    </div>
+                    <div>Fetching Data...</div>
+                </div>
+            )
         }
     }
 }

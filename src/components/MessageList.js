@@ -17,7 +17,6 @@ class MessageList extends React.Component {
     }
 
     render(){
-        // console.log(this.props.users)
         return(
             <div className="col-12 messages_list_group">
                 {this.props.users.length===0 ? 
