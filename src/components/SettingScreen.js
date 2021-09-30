@@ -72,35 +72,68 @@ class SettingScreen extends React.Component {
     componentDidMount = () => {
         this.fetchUserData();
     }
+
+    resizeImage = (base64Str, maxWidth, maxHeight) => {
+        return new Promise((resolve) => {
+          let img = new Image()
+          img.src = base64Str
+          img.onload = () => {
+            let canvas = document.createElement('canvas')
+            const MAX_WIDTH = maxWidth
+            const MAX_HEIGHT = maxHeight
+            let width = img.width
+            let height = img.height
+      
+            if (width > height) {
+              if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width
+                width = MAX_WIDTH
+              }
+            } else {
+              if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height
+                height = MAX_HEIGHT
+              }
+            }
+            canvas.width = width
+            canvas.height = height
+            let ctx = canvas.getContext('2d')
+            ctx.drawImage(img, 0, 0, width, height)
+            resolve(canvas.toDataURL('image/jpeg', 1.0))
+          }
+        })
+      }
+
     
     fileUpload = (e) => {
         this.setState({dpStatus:"Uploading"})
         let file = e.target.files[0];
         
         this.getBase64(file, (result) => {
+            this.resizeImage(result,200,200).then(data => {
+                var storageRef = firebase.storage().ref();
+                var uploadTask = storageRef.child('dp/'+this.props.uid+'.jpg').putString(data, "data_url", {contentType:'image/jpeg'});
+                
+                uploadTask.on('state_changed', 
+                (snapshot) => {}, 
+                (error) => {}, 
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        firebase.auth().currentUser.updateProfile({
+                            photoURL: downloadURL
+                          }).then(() => {
+                            console.log('Saved at',downloadURL)
+                            this.setState({dpStatus:"Uploaded",dpClass:"btn btn-success"})
+                        }).catch((error) => {
+                            console.log('error',error)
+                        });
+                    });
+                }
+                );
+            });
             console.log('base64 Loaded');
             document.getElementById("UserDP").src = result;
         });
-    
-        var storageRef = firebase.storage().ref();
-        var uploadTask = storageRef.child('dp/'+this.props.uid+'.jpg').put(file);
-        
-        uploadTask.on('state_changed', 
-        (snapshot) => {}, 
-        (error) => {}, 
-        () => {
-            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                firebase.auth().currentUser.updateProfile({
-                    photoURL: downloadURL
-                  }).then(() => {
-                    console.log('Saved at',downloadURL)
-                    this.setState({dpStatus:"Uploaded",dpClass:"btn btn-success"})
-                }).catch((error) => {
-                    console.log('error',error)
-                });
-            });
-        }
-        );
     }
 
     updateProfile = () => {
@@ -132,10 +165,6 @@ class SettingScreen extends React.Component {
     }
   
     render(){
-        let menu;
-        if(this.props.menu==="Edit")menu = "Edit Profile";
-        else menu="Change Password";
-
         return(
             <div className="chat-col" >
                 {!this.props.menu ?
@@ -151,12 +180,12 @@ class SettingScreen extends React.Component {
                         </svg>
                     </div>
                     <div style={{display:'block',alignSelf: 'center', paddingLeft:'10px', flexGrow:'1'}}>
-                        <h5 className="recepient_name" style={{marginBottom:'0px'}}>{menu}</h5>
+                        <h5 className="recepient_name" style={{marginBottom:'0px'}}>{this.props.menu}</h5>
                     </div>
                 </div>   
                 }
 
-                {this.props.menu==="Edit" &&
+                {this.props.menu==="Edit Profile" &&
                     <div className="update-form">
                         <div style={{textAlign:'center'}}>
                             <img id="UserDP" alt="DP" className="updateDP" src={this.state.downloadUrl} />
@@ -184,7 +213,7 @@ class SettingScreen extends React.Component {
                 }
 
                 {/* Password */}
-                {this.props.menu==="password" &&
+                {this.props.menu==="Change Password" &&
                     <div className="update-form">
                         <div className="form-group">
                             <label>Old Password</label>

@@ -30,6 +30,7 @@
   justify-content: center;
   height: 100vh;
   margin: 0px 10px;
+  padding: 0% 20%;
 }
 
 
@@ -403,6 +404,10 @@ div::-webkit-scrollbar {
 
 .whitee{
   background-color: white;
+}
+
+.whitee:hover{
+  background-color: #ccc;
 }
 
 .upload-on-image{
