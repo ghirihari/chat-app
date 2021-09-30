@@ -6,17 +6,14 @@ function PostTile(props) {
     var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     var time = months[date.getMonth()]+" "+date.getDate()+","+date.getFullYear()
     return(
-        <div className="col post shadow">
+        <div className="post">
             {/* Posts */}
-            <div className="post-image-container">
-                <img alt="DP" className="post-image" src={props.postURL} />
-            </div>
-            {/* <div className="post-image-text">
-                <label style={{display:'block',textAlign:'center'}}>{'@'+props.name}</label>
-            </div> */}
-            <div className="post-caption">
+            {/* <div className="post-image-container"> */}
+                <img alt="post" className="post-image" src={props.postURL} />
+            {/* </div> */}
+            {/* <div className="post-caption">
                 <label style={{display:'block',textAlign:'center'}}>{time}</label>
-            </div>
+            </div> */}
         </div>
     );
 }
@@ -50,7 +47,7 @@ class PostScreen extends React.Component {
                     {/* Posts */}
                     {(this.props.wallData&&this.props.wallData!=='None') &&
                         <div className="col chat-messages">
-                            <div className="" style={{display: 'flex', flexFlow: 'row wrap'}}>
+                            <div className="imageGrid">
                                     {Object.entries(this.props.wallData).map((item,index)=>{
                                         return(
                                             <PostTile

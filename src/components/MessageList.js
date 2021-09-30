@@ -1,4 +1,6 @@
 import React from 'react';
+import CryptoJS from 'crypto-js';
+
 // import { Redirect } from "react-router-dom";
 // import logo from './assets/pew.jpg'; 
 
@@ -11,7 +13,14 @@ class MessageList extends React.Component {
         }
     }
 
+    b64decode = (data) => {
+        var b = new Buffer(data, 'base64')
+        var s = b.toString();
+        return s;
+    }
+    
     select = (item) => {
+        console.log(item)
         this.setState({selected:item})
         this.props.setRec(item)
     }
@@ -22,18 +31,28 @@ class MessageList extends React.Component {
                 {this.props.users.length===0 ? 
                 <div style={{textAlign:'center'}}>
                     <h5><span className="badge badge-danger">No Chats Found</span></h5>
-                    {/* <label className="sub_Heading" style={{margin:'0px 15px'}}>No Chats Found</label>  */}
                 </div>:
                 <div className="messages-list">
                     {this.props.users.map((item,index) => {
                         var len = Object.entries(this.props.chatData[item.id]).length;
                         var text = Object.entries(this.props.chatData[item.id])[len-1][1].text;
                         var message_class = "row messages_list_item shadow";
-                        // if(this.state.selected){
-                        //     if(item.id === this.state.selected.id){
-                        //         message_class += " selected"
-                        //     }
-                        // }
+
+                        if(this.props.recipient===item){
+                            message_class+=" gradient-list";
+                        }
+
+                        var MessageText = text;
+                        try{
+                            var pure = this.b64decode(text)
+                            var bytes  = CryptoJS.AES.decrypt(pure, item.sharedKey);
+                            var originalText = bytes.toString(CryptoJS.enc.Utf8);
+                            MessageText = originalText;   
+                        }
+                        catch(err){
+                            console.log(err);
+                        }
+
                         if(text.length>35)
                             text = text.slice(0,35)+'...'
                         return(
@@ -48,7 +67,7 @@ class MessageList extends React.Component {
                                         </div>
                                         <div className="col">
                                             <div className="time">
-                                                <p style={{marginBottom:'0px'}}>{text}</p>
+                                                <p style={{marginBottom:'0px'}}>{MessageText}</p>
                                             </div>
                                         </div>
                                     </div>

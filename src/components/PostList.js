@@ -22,35 +22,71 @@ class PostList extends React.Component {
         };
     }
 
+    resizeImage = (base64Str, maxWidth, maxHeight) => {
+        return new Promise((resolve) => {
+          let img = new Image()
+          img.src = base64Str
+          img.onload = () => {
+            let canvas = document.createElement('canvas')
+            const MAX_WIDTH = maxWidth
+            const MAX_HEIGHT = maxHeight
+            let width = img.width
+            let height = img.height
+      
+            if (width > height) {
+              if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width
+                width = MAX_WIDTH
+              }
+            } else {
+              if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height
+                height = MAX_HEIGHT
+              }
+            }
+            canvas.width = width
+            canvas.height = height
+            let ctx = canvas.getContext('2d')
+            ctx.drawImage(img, 0, 0, width, height)
+            resolve(canvas.toDataURL('image/jpeg', 1.0))
+          }
+        })
+      }
 
-    fileUpload = (e) => {
+    fileUpload = async(e) => {
+        this.props.setUploading(true);
+
         this.setState({btnState:'Uploading',btnClass:'btn btn-warning'})
         let file = e.target.files[0];
-        this.getBase64(file, (result) => {
-            console.log('base64 Loaded');
-            // document.getElementById("UserDP").src = result;
-        });
-    
-        var time = new Date().getTime();
-        var storageRef = firebase.storage().ref();
-        var uploadTask = storageRef.child('posts/'+this.props.user.uid+'/'+time).put(file);
         
-        uploadTask.on('state_changed', 
-        (snapshot) => {}, 
-        (error) => {}, 
-        () => {
-            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                firebase.database().ref('posts/'+this.props.user.uid).push(
-                    {
-                        image:downloadURL, 
-                        time:new Date().getTime()
-                    }).then(()=>{
-                        console.log('Saved at',downloadURL)
-                        this.setState({btnState:'Uploaded',btnClass:'btn btn-success'})
-                    })
-            });
-        }
-        );
+        this.getBase64(file, (result) => {
+            this.resizeImage(result,200,200).then(data => {
+                var time = new Date().getTime();
+                var storageRef = firebase.storage().ref();                
+                console.log(data)
+
+                var uploadTask = storageRef.child('posts/'+this.props.user.uid+'/'+time).putString(data, "data_url", {contentType:'image/jpeg'});                
+                uploadTask.on('state_changed', 
+                (snapshot) => {}, 
+                (error) => {}, 
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        firebase.database().ref('posts/'+this.props.user.uid).push(
+                            {
+                                image:downloadURL, 
+                                time:new Date().getTime()
+                            }).then(()=>{
+                                console.log('Saved at',downloadURL)
+                                this.props.setUploading(false);
+                                this.setState({btnState:'Uploaded',btnClass:'btn btn-success'})
+                            })
+                    });
+                }
+                );
+
+            })
+            // document.getElementById("UserDP").src = result;            
+        });
     }
 
     setMe = () => {
@@ -69,7 +105,7 @@ class PostList extends React.Component {
                     <div style={{textAlign:'center'}}>
                         <div>
                             <input hidden id="icon-button-file" type="file" onChange={this.fileUpload}/>
-                            <label htmlFor="icon-button-file" style={{width:'100%'}} className="btn btn-dark">{this.state.btnState}</label>
+                            <label htmlFor="icon-button-file" style={{width:'100%'}} className="btn btn-dark">Upload Image</label>
                         </div>
                         <div id={this.props.user.uid} onClick={()=>{this.setMe()}} className={"row messages_list_item shadow "} key={this.props.user.id}>
                                     <div className="col-2" style={{padding:'0px'}}>

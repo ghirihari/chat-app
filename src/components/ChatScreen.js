@@ -4,6 +4,9 @@ import React from 'react';
 import firebase from '../config/firebase'
 import '../App.css';
 import tone from './assets/Tone.mp3'
+import CryptoJS from 'crypto-js';
+  
+
 class ChatScreen extends React.Component {
 
     constructor(props){
@@ -22,10 +25,24 @@ class ChatScreen extends React.Component {
     messageTyped = (event) => {
         this.setState({message: event.target.value});
       }
-  
+
+    b64encode = (data) => {
+        var b = new Buffer(data);
+        var s = b.toString('base64');
+        return s;      
+    }
+
+    b64decode = (data) => {
+        var b = new Buffer(data, 'base64')
+        var s = b.toString();
+        return s;
+    }
     sendMessage = () => {
+        var ciphertext = CryptoJS.AES.encrypt(this.state.message,this.props.name.sharedKey).toString();
+        ciphertext = this.b64encode(ciphertext);
+        
         this.setState({sent:true})
-        fetch("https://garnet-gregarious-robe.glitch.me/send?from="+this.props.userid+"&to="+this.props.name.id+"&message="+this.state.message)
+        fetch("https://garnet-gregarious-robe.glitch.me/send?from="+this.props.userid+"&to="+this.props.name.id+"&message="+ciphertext+"&type=chat")
         .then(response => response.json())
         .then(data => {
             if(data.status===200){
@@ -58,10 +75,10 @@ class ChatScreen extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(prevProps.data != this.props.data)
+        if(prevProps.data !== this.props.data)
         {
             console.log('sent',this.state.sent)
-            if(this.state.sent==true)
+            if(this.state.sent===true)
             {
                 this.setState({sent:false})
             }else{
@@ -74,10 +91,11 @@ class ChatScreen extends React.Component {
     
     componentDidMount = () => {
         this.audioEl = document.getElementById('tone')
+        this.scrollToBottom();
     }
 
     render(){
-
+            console.log(this.props.name.sharedKey)
             return(
                 <div className="chat-col">
                     <audio id="tone" className="audio-element">
@@ -116,18 +134,37 @@ class ChatScreen extends React.Component {
                         {Object.entries(this.props.data[this.props.name.id]).map((item,index) => {
                             let data = item[1]
                             let time = new Date(data.time).toLocaleTimeString();
-
+                            let BubbleClass = "bubble sender shadow"
+                            
                             var type = (data.from!==this.props.userid)?"left":"right-bubble"
-                                return(
+                            if(data.type==='welcome'){
+                                type="center-bubble";
+                                BubbleClass="bubble welcomeBubble shadow"
+                            }else{
+                                BubbleClass = "bubble sender shadow"
+                            }
+                            console.log(item)
+                            var MessageText = data.text;
+
+                            try{
+                                var pure = this.b64decode(data.text)
+                                var bytes  = CryptoJS.AES.decrypt(pure, this.props.name.sharedKey);
+                                var originalText = bytes.toString(CryptoJS.enc.Utf8);
+                                MessageText = originalText
+                            }
+                            catch(err)
+                            {
+                                console.log(err)
+                            }
+                        
+                            return(
                                 <div className={type} key={index}>
-                                    <div>
-                                        <div key={index}>
-                                        <label className="bubble-message-name">{time}</label>
-                                            <div className="bubble sender shadow">
-                                                <label className="bubble-message">{data.text}</label>
-                                            </div>
-                                        </div> 
-                                    </div>
+                                    <div key={index}>
+                                    {type==="welcome"&&<label className="bubble-message-name">{time}</label>}
+                                        <div className={BubbleClass}>
+                                            <label className="bubble-message">{MessageText}</label>
+                                        </div>
+                                    </div> 
                                 </div>
                                 )
                         })}
