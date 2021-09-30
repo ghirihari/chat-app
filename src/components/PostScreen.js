@@ -1,4 +1,5 @@
 import React from 'react';
+import Posts from './assets/posts.png'
 
 function PostTile(props) {
     var date = new Date(props.time);
@@ -22,9 +23,14 @@ class PostScreen extends React.Component {
         return(
             <div className="col chat-col" style={{ overflowY:'scroll'}}>
                 {!this.props.name &&
-                <div style={{textAlign:'center'}}>
-                    <h1 className="title_font" style={{color:'black',fontSize:'100px'}}>Posts</h1>
-                </div>
+                    <div className="chat-col" style={{justifyContent:'center'}}>
+                        <div style={{textAlign:'center'}}>
+                            <img src={Posts} alt="Illustration" className="illustration"></img>
+                            {/* {/* <h1 className="title_font" style={{color:'black',fontSize:'100px'}}>Chats</h1> */}
+                            {/* <h2 className="capt">Click on a friend to view his posts</h2>  */}
+                        </div>
+                    </div> 
+
                 }
 
             {this.props.name &&

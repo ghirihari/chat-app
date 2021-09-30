@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './assets/pew.jpg'; 
 import firebase from '../config/firebase'
 import '../App.css';
+import Settings from './assets/settings.png'
 
 class SettingScreen extends React.Component {
 
@@ -12,10 +13,11 @@ class SettingScreen extends React.Component {
             messages:[],
             record:{displayName:null,email:null,photoURL:null},
             downloadUrl:logo,
-            username:null,
-            email:null,
-            oldPass:null,
-            newPass:null,
+            username:"",
+            email:"",
+            oldPass:"",
+            newPass:"",
+            key:"",
             status:{text:'Update',class:'btn btn-primary'},
             PassStatus:{text:'Change Password',class:'btn btn-danger'},
             dpStatus:'Change Profile Picture',
@@ -37,6 +39,10 @@ class SettingScreen extends React.Component {
 
     newPassTyped = (event) => {
         this.setState({newPass: event.target.value});
+    }
+
+    keyTyped = (event) => {
+        this.setState({key: event.target.value});
     }
 
     getBase64(file, cb) {
@@ -163,14 +169,22 @@ class SettingScreen extends React.Component {
             }
         });
     }
+
+    changeKey = (data) => {
+        this.props.setPrivate(data);
+        window.location.reload(); 
+
+    }
   
     render(){
         return(
             <div className="chat-col" >
                 {!this.props.menu ?
-                <div style={{textAlign:'center'}}>
-                    <h1 className="title_font" style={{color:'black',fontSize:'100px'}}>Settings</h1>
-                </div>
+                    <div className="chat-col" style={{justifyContent:'center'}}>
+                        <div style={{textAlign:'center'}}>
+                            <img src={Settings} alt="Illustration" className="illustration"></img>
+                        </div>
+                    </div> 
                 :
                 // Title
                 <div className="chat-title shadow" style={{display: 'flex',alignItems: 'center',justifyContent: 'center', height: '75px',textAlign: 'center'}}>
@@ -230,7 +244,19 @@ class SettingScreen extends React.Component {
                         </div>
                 </div>
                 }
-                
+
+                {this.props.menu==="Change Encryption Key" &&
+                    <div className="update-form">
+                        <div className="form-group">
+                            <label>Change Encryption Key</label>
+                            <input type="password" className="form-control key" placeholder="Key" value={this.state.key} onChange={this.keyTyped}/>
+                        </div>
+                        <div style={{textAlign:'end'}}>
+                            <button type="submit" className="btn btn-danger" style={{marginRight:'5px'}} onClick={()=>this.changeKey("")}>Clear</button>
+                            <button type="submit" className="btn btn-primary" onClick={()=>this.changeKey(this.state.key)}>Submit</button>
+                        </div>
+                    </div>                
+                }
             </div>
         )
     }

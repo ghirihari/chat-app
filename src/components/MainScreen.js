@@ -5,7 +5,7 @@ import FriendScreen from './FriendScreen'
 import SettingScreen from './SettingScreen'
 import PostScreen from './PostScreen'
 import Logo from './assets/logo.png'; 
-
+import Chat from './assets/chat.png'; 
 
 const RenderScreen = (props) => {
     switch(props.menu){
@@ -16,15 +16,18 @@ const RenderScreen = (props) => {
                         name={props.recipient}
                         userid={props.user.uid}
                         data={props.chatData}
-                        unSetRec={props.unSetRec}/>
+                        unSetRec={props.unSetRec}
+                        private={props.private}
+                        />
                 )   
             }
             else{
                 return(
                     <div className="chat-col" style={{justifyContent:'center'}}>
                         <div style={{textAlign:'center'}}>
-                            <h1 className="title_font" style={{color:'black',fontSize:'100px'}}>Chats</h1>
-                            <h2 style={{fontSize:'20px',marginTop:'-25px',fontStyle:'italic'}}>Click a friend to view his Chats</h2>
+                            <img src={Chat} alt="Illustration" className="illustration"></img>
+                            {/* {/* <h1 className="title_font" style={{color:'black',fontSize:'100px'}}>Chats</h1> */}
+                            {/* <h2 className="capt">Click on a friend to chat</h2>  */}
                         </div>
                     </div> 
                 );
@@ -53,6 +56,9 @@ const RenderScreen = (props) => {
                     uid = {props.user.uid} 
                     menu={props.settingsMenu}
                     unSetSettings={props.unSetSettings}
+                    private={props.private}
+                    setPrivate={props.setPrivate}
+              
                     />
         default:
             return <></>;
@@ -82,6 +88,9 @@ const MainScreen = (props) => {
                 unSetMapMode = {props.unSetMapMode}
                 unSetWall = {props.unSetWall}
                 unSetSettings = {props.unSetSettings}
+                private={props.private}
+                setPrivate={props.setPrivate}
+          
             />
     </div>
     )

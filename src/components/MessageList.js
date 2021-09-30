@@ -43,14 +43,17 @@ class MessageList extends React.Component {
                         }
 
                         var MessageText = text;
-                        try{
-                            var pure = this.b64decode(text)
-                            var bytes  = CryptoJS.AES.decrypt(pure, item.sharedKey);
-                            var originalText = bytes.toString(CryptoJS.enc.Utf8);
-                            MessageText = originalText;   
-                        }
-                        catch(err){
-                            console.log(err);
+                        if(this.props.private)
+                        {
+                            try{
+                                var pure = this.b64decode(text)
+                                var bytes  = CryptoJS.AES.decrypt(pure, item.sharedKey);
+                                var originalText = bytes.toString(CryptoJS.enc.Utf8);
+                                MessageText = originalText;   
+                            }
+                            catch(err){
+                                console.log(err);
+                            }    
                         }
 
                         if(text.length>35)
@@ -61,7 +64,7 @@ class MessageList extends React.Component {
                                     <img alt="DP" className="listDP"src={item.displayPicture} />
                                 </div>
                                 <div className="col-10" style={{alignSelf:'center'}}>
-                                    <div className="row">
+                                    <div className="row" style={{overflow:'hidden'}}>
                                         <div className="col-12">  
                                             <p className="message-list-name">{item.displayName}</p>
                                         </div>

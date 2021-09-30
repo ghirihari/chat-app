@@ -1,5 +1,4 @@
 import React from 'react';
-// import logo from './assets/pew.jpg'; 
 // import { Redirect } from "react-router-dom";
 import firebase from '../config/firebase'
 import '../App.css';
@@ -146,15 +145,18 @@ class ChatScreen extends React.Component {
                             console.log(item)
                             var MessageText = data.text;
 
-                            try{
-                                var pure = this.b64decode(data.text)
-                                var bytes  = CryptoJS.AES.decrypt(pure, this.props.name.sharedKey);
-                                var originalText = bytes.toString(CryptoJS.enc.Utf8);
-                                MessageText = originalText
-                            }
-                            catch(err)
+                            if(this.props.private)
                             {
-                                console.log(err)
+                                try{
+                                    var pure = this.b64decode(data.text)
+                                    var bytes  = CryptoJS.AES.decrypt(pure, this.props.name.sharedKey);
+                                    var originalText = bytes.toString(CryptoJS.enc.Utf8);
+                                    MessageText = originalText
+                                }
+                                catch(err)
+                                {
+                                    console.log(err)
+                                }    
                             }
                         
                             return(

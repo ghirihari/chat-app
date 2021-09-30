@@ -8,7 +8,7 @@ const Sidebar = (props) => {
         <div className={props.MessageListClass}>
             
             <div>
-                <div style={{textAlign:'center'}}>
+                <div className="title_cont">
                     <h1 className="title_font">Instance</h1>
                 </div>
                 {/* Icons*/}
@@ -63,6 +63,7 @@ const Sidebar = (props) => {
                             type={"request"}
                             setRec={props.setRec}
                             chatData={props.chatData}
+                            private={props.private}
                         />
                     </div>
                 }
@@ -80,6 +81,7 @@ const Sidebar = (props) => {
                     <SettingsList 
                         setSettings={props.setSettings}
                         logout={props.logout}
+                        toggleTheme={props.toggleTheme}
                     />
                 }
 

@@ -11,6 +11,7 @@ class Chats extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+        theme:'dark',
         user:null,
         occupants:[],
         message:null,
@@ -34,17 +35,27 @@ class Chats extends React.Component {
         }
     } 
 
+    toggleTheme = () => {
+        let theme = (this.state.theme==='dark')?'light':'dark'
+        this.setState({theme:theme})
+    }
+
     setUploading = (flag) => {
         console.log(flag)
         this.setState({uploading:flag})
     }
 
     setPrivate = (key) => {
+        if(key=="")
+        {
+            this.setState({private:''})
+        }
         var k = new Buffer(key);
         this.setState({private:k.toString('base64')})
         localStorage.private = k.toString('base64')
         this.renderFriends(this.state.user);
-        this.getChats();    
+        this.getChats();
+        console.log(key)    
     }
 
     setMenu = (menu) => {
@@ -332,11 +343,11 @@ class Chats extends React.Component {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setState({user:user})
-                if(this.state.private)
-                {
+                // if(this.state.private)
+                // {
                     this.renderFriends(user);
                     this.getChats();    
-                }
+                // }
                 // this.getLocation()
             } else {
                 this.props.history.push('/login');
@@ -351,9 +362,9 @@ class Chats extends React.Component {
    
   render(){
     //   console.log(this.state.addFriendClass,this.state.addFriendStatus)
-        if(this.state.user && this.state.occupants.length && this.state.private){
+        if(this.state.user && this.state.occupants.length){
             return (
-                <div className="col">
+                <div className={"col "+this.state.theme}>
                 <div className="row" style={{height:'100vh'}}>
                     <Sidebar
                         recipient={this.state.recipient}
@@ -378,6 +389,8 @@ class Chats extends React.Component {
                         addFriendStatus = {this.state.addFriendStatus}
                         error={this.state.error}
                         setUploading={this.setUploading}
+                        private={this.state.private}
+                        toggleTheme={this.toggleTheme}
                     />
                     <MainScreen
                         ChatScreenClass = {this.state.ChatScreenClass}
@@ -393,6 +406,8 @@ class Chats extends React.Component {
                         unSetWall = {this.unSetWall}
                         unSetSettings = {this.unSetSettings}
                         uploading={this.state.uploading}
+                        private={this.state.private}
+                        setPrivate={this.setPrivate}
                      
                     />
                 </div>

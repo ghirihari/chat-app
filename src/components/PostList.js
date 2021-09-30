@@ -8,7 +8,7 @@ class PostList extends React.Component {
         super()
         this.state = {
             btnState:"Add Post",
-            btnClass:'btn btn-dark'
+            btnClass:'btn btn-primary'
         }
     }
     getBase64(file, cb) {
@@ -105,7 +105,7 @@ class PostList extends React.Component {
                     <div style={{textAlign:'center'}}>
                         <div>
                             <input hidden id="icon-button-file" type="file" onChange={this.fileUpload}/>
-                            <label htmlFor="icon-button-file" style={{width:'100%'}} className="btn btn-dark">Upload Image</label>
+                            <label htmlFor="icon-button-file" style={{width:'100%'}} className="btn btn-danger">Upload Image</label>
                         </div>
                         <div id={this.props.user.uid} onClick={()=>{this.setMe()}} className={"row messages_list_item shadow "} key={this.props.user.id}>
                                     <div className="col-2" style={{padding:'0px'}}>

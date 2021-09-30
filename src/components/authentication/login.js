@@ -9,8 +9,9 @@ class Login extends React.Component {
     constructor(){
         super();
         this.state = {
-            email:null,
-            pass:null,
+            email:"",
+            pass:"",
+            key:"",
             redirect:false,
             btnStatus: 'Log in',
             btnClass:' btn btn-primary',
@@ -21,13 +22,23 @@ class Login extends React.Component {
 
     emailTyped = (event) => {this.setState({email: event.target.value});}
     passTyped = (event) => {this.setState({pass: event.target.value});}
+    keyTyped = (event) => {this.setState({key: event.target.value});}
 
+    setPrivate = (key) => {
+        if(key=="")
+        {
+          localStorage.private = ""
+        }
+        var k = new Buffer(key);
+        localStorage.private = k.toString('base64')
+    }
 
     login = () =>{
         this.setState({btnStatus:'Logging in',btnClass:'btn btn-success',error:null})
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.pass)
         .then((userCredential) => {
             // var user = userCredential.user;
+            this.setPrivate(this.state.key);
             this.setState({redirect:true})
         })
         .catch((error) => {
@@ -63,7 +74,11 @@ class Login extends React.Component {
                 </div>
             
                 <div className="form-group">
-                    <input type="password" className="form-control login-input-field" placeholder="Password" onChange={this.passTyped}/>
+                    <input type="password" className="form-control login-input-field key" placeholder="Password" onChange={this.passTyped}/>
+                </div>
+
+                <div className="form-group">
+                    <input type="password" className="form-control login-input-field key" placeholder="Encryption Key" onChange={this.keyTyped}/>
                 </div>
 
                 {this.state.error &&
