@@ -1,23 +1,24 @@
 {
   "files": {
-    "main.css": "/static/css/main.08488163.chunk.css",
-    "main.js": "/static/js/main.78f007e3.chunk.js",
-    "main.js.map": "/static/js/main.78f007e3.chunk.js.map",
+    "main.css": "/static/css/main.ace4a1fc.chunk.css",
+    "main.js": "/static/js/main.f740ce3d.chunk.js",
+    "main.js.map": "/static/js/main.f740ce3d.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.190195a8.js",
     "runtime-main.js.map": "/static/js/runtime-main.190195a8.js.map",
-    "static/js/2.535697a3.chunk.js": "/static/js/2.535697a3.chunk.js",
-    "static/js/2.535697a3.chunk.js.map": "/static/js/2.535697a3.chunk.js.map",
+    "static/js/2.5a4e19ff.chunk.js": "/static/js/2.5a4e19ff.chunk.js",
+    "static/js/2.5a4e19ff.chunk.js.map": "/static/js/2.5a4e19ff.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.08488163.chunk.css.map": "/static/css/main.08488163.chunk.css.map",
-    "static/js/2.535697a3.chunk.js.LICENSE.txt": "/static/js/2.535697a3.chunk.js.LICENSE.txt",
-    "static/media/Tone.f4570310.mp3": "/static/media/Tone.f4570310.mp3",
+    "static/css/main.ace4a1fc.chunk.css.map": "/static/css/main.ace4a1fc.chunk.css.map",
+    "static/js/2.5a4e19ff.chunk.js.LICENSE.txt": "/static/js/2.5a4e19ff.chunk.js.LICENSE.txt",
+    "static/media/Tone.mp3": "/static/media/Tone.f4570310.mp3",
     "static/media/App.css": "/static/media/bg-marble.9b90bc99.jpg",
-    "static/media/pew.bbd2dc17.jpg": "/static/media/pew.bbd2dc17.jpg"
+    "static/media/logo.png": "/static/media/logo.6bcee72e.png",
+    "static/media/pew.jpg": "/static/media/pew.bbd2dc17.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.190195a8.js",
-    "static/js/2.535697a3.chunk.js",
-    "static/css/main.08488163.chunk.css",
-    "static/js/main.78f007e3.chunk.js"
+    "static/js/2.5a4e19ff.chunk.js",
+    "static/css/main.ace4a1fc.chunk.css",
+    "static/js/main.f740ce3d.chunk.js"
   ]
 }

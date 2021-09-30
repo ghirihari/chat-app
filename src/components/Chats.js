@@ -35,6 +35,7 @@ class Chats extends React.Component {
     } 
 
     setUploading = (flag) => {
+        console.log(flag)
         this.setState({uploading:flag})
     }
 
@@ -60,6 +61,9 @@ class Chats extends React.Component {
             case 'Settings':
                 this.setState({menu:'Settings'})
                 break;    
+            default:
+                this.setState({menu:'Chats',recipient:null})
+                break;
         }
     }
 
@@ -200,7 +204,8 @@ class Chats extends React.Component {
                 var yyyy = today.getFullYear();
                 today = mm + '/' + dd + '/' + yyyy;
 
-                var message = 'Friends from '+today;
+                var message = 'Friends from ';
+                message += today;
                 var ciphertext = CryptoJS.AES.encrypt(message,'iamironman').toString();
                 ciphertext = this.b64encode(ciphertext);
 

@@ -30,7 +30,7 @@ class StoryScreen extends React.Component {
         .then(response => response.json())
         .then(data => {
             var friends = []
-            data.map((item,index) => {
+            let temp = data.map((item) => {
                 firebase.database().ref('location/' + item.id).once('value', (snapshot) => {
                     if(snapshot.val())
                     {

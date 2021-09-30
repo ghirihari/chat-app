@@ -39,7 +39,7 @@ class Signup extends React.Component {
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pass)
       .then(async(userCredential) => {
         var user = userCredential.user;
-        var res =  await this.addUserData(user.uid,this.state.username)
+        await this.addUserData(user.uid,this.state.username)
         this.setState({btnStatus:'Registered',btnClass:'btn-success'})
       })
       .catch((error) => {
@@ -129,7 +129,7 @@ class Signup extends React.Component {
                     }
                     <div className="form-group signup-card">
                       <p className="paragraphs">Already a member? </p>
-                      <a role="button" style={{color: '#0056b3', cursor: 'pointer'}} onClick={()=>this.setState({login:true})}>Log in</a>
+                      <label role="button" style={{color: '#0056b3', cursor: 'pointer'}} onClick={()=>this.setState({login:true})}>Log in</label>
                     </div>
 
                   </div>

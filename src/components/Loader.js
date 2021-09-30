@@ -10,7 +10,7 @@ const Loader = (props) => {
 
     return (
         <div className="LoadingPage">
-            <div><img src={Logo} className="loader"/></div>
+            <div><img src={Logo} alt="Loader" className="loader"/></div>
             {(!props.private) &&
                 <div className="pinCont">
                     <input className="pin" placeholder="Enter your Pin" value={Pin} onChange={(e)=>pinTyped(e)}/>

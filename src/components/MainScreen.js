@@ -29,7 +29,6 @@ const RenderScreen = (props) => {
                     </div> 
                 );
             }
-            break
         case "Friends-Map":
             return (
                 <StoryScreen
@@ -37,12 +36,10 @@ const RenderScreen = (props) => {
                     unSetMapMode = {props.unSetMapMode}
                 />
             )
-            break;
         case "Add Friends":
             return(
                 <FriendScreen uid = {props.user.uid}/>
             )
-            break;
         case "Posts":
             return <PostScreen
                         name={props.recipient}
@@ -51,14 +48,14 @@ const RenderScreen = (props) => {
                         wallData = {props.wallData}
                         unSetWall = {props.unSetWall}
                     />
-            break;
         case 'Settings':
             return <SettingScreen 
                     uid = {props.user.uid} 
                     menu={props.settingsMenu}
                     unSetSettings={props.unSetSettings}
                     />
-            break;
+        default:
+            return <></>;
     }
 }
 
@@ -67,7 +64,7 @@ const MainScreen = (props) => {
         <div className={props.ChatScreenClass} style={{padding:'0px'}}>
             {props.uploading &&
                 <div className="upload">
-                    <div><img src={Logo} className="loader"/></div>
+                    <div><img src={Logo} alt="Loader" className="loader"/></div>
                     <label>Uploading...</label>
                 </div>
             }

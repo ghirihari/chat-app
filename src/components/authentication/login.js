@@ -77,7 +77,7 @@ class Login extends React.Component {
                 </div>
 
                 <div className="form-group signup-card">
-                  <p className="paragraphs">Don't have an account? </p><a role="button" style={{color: '#0056b3', cursor: 'pointer'}} onClick={()=>this.setState({signup:true})}>Sign up</a>
+                  <p className="paragraphs">Don't have an account? </p><label role="button" style={{color: '#0056b3', cursor: 'pointer'}} onClick={()=>this.setState({signup:true})}>Sign up</label>
                 </div>
 
 

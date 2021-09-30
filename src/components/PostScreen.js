@@ -1,10 +1,9 @@
 import React from 'react';
-import logo from './assets/pew.jpg'; 
 
 function PostTile(props) {
     var date = new Date(props.time);
     var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var time = months[date.getMonth()]+" "+date.getDate()+","+date.getFullYear()
+    // var time = months[date.getMonth()]+" "+date.getDate()+","+date.getFullYear()
     return(
         <div className="post">
             {/* Posts */}
