@@ -40,6 +40,7 @@ class Signup extends React.Component {
       .then(async(userCredential) => {
         var user = userCredential.user;
         await this.addUserData(user.uid,this.state.username)
+        userCredential.user.updateProfile({displayName: this.state.username})
         this.setState({btnStatus:'Registered',btnClass:'btn-success'})
       })
       .catch((error) => {
@@ -100,16 +101,16 @@ class Signup extends React.Component {
                 </div>
                 <div className="row">
                   {/* DP Column */}
-                  <div className="col-lg-6 col-sm-12" style={{alignSelf:'center'}}>
+                  {/* <div className="col-lg-6 col-sm-12" style={{alignSelf:'center'}}>
                     <div style={{textAlign:'center'}}>
                       <img id="UserDP" alt="DP" className="updateDP" src={logo} />
                       <div>
                         <button className="btn btn-outline-light changeDP">Change Profile Picture</button>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   {/* Form Column */}
-                  <div className="col-lg-6 col-sm-12">
+                  <div className="col-lg-12 col-sm-12">
                     <div className="form-group">
                         <input className="form-control" placeholder="Username" onChange={this.usernameTyped}/>
                     </div>

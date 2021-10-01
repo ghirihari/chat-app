@@ -5,6 +5,7 @@ import MainScreen from './MainScreen';
 import CryptoJS from 'crypto-js';
 import Sidebar from './Sidebar'
 import Loader from './Loader';
+import GenKey from './GenKey';
 
 class Chats extends React.Component {
 
@@ -31,9 +32,15 @@ class Chats extends React.Component {
         ChatScreenClass:"col-lg-9 d-none d-lg-block",
         MessageListClass:"col-lg-3 col-sm-12 contacts_col",
         private:localStorage.private,
-        uploading:false
+        uploading:false,
+        keys:0,
+        // 0 : loading
+        // 1 : Yes
+        // 2 : No
         }
     } 
+
+    setKeys = () => this.setState({keys:true});
 
     toggleTheme = () => {
         let theme = (this.state.theme==='dark')?'light':'dark'
@@ -217,15 +224,13 @@ class Chats extends React.Component {
 
                 var message = 'Friends from ';
                 message += today;
-                var ciphertext = CryptoJS.AES.encrypt(message,'iamironman').toString();
-                ciphertext = this.b64encode(ciphertext);
 
-                fetch("https://garnet-gregarious-robe.glitch.me/send?from="+this.state.user.uid+"&to="+this.state.searched.uid+"&type=welcome"+"&message="+ciphertext)
+                fetch("https://garnet-gregarious-robe.glitch.me/send?from="+this.state.user.uid+"&to="+this.state.searched.uid+"&type=welcome"+"&message="+message)
                 .then(response => response.json())
                 .then(data => {
                     if(data.status===200){
                         this.setState({addFriendStatus:'Added',addFriendClass:'btn btn-success'})
-                        // console.log('Friend Added')
+                        console.log('Friend Added')
                     }
                     else if(data.status===404){
                         console.error(data)
@@ -338,17 +343,25 @@ class Chats extends React.Component {
         }
     }
 
+    getKey = () => {
+        console.log(this.state)
+        firebase.database().ref('keys/'+this.state.user.uid).once('value', (snapshot) => {
+            if(snapshot.val()){
+                this.setState({keys:1})
+            }else{
+                this.setState({keys:2})
+            }
+        })
+    }
 
     componentDidMount = () => {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setState({user:user})
-                // if(this.state.private)
-                // {
-                    this.renderFriends(user);
-                    this.getChats();    
-                // }
-                // this.getLocation()
+                this.renderFriends(user);
+                this.getChats();    
+                this.getKey();
+                
             } else {
                 this.props.history.push('/login');
             }
@@ -361,11 +374,21 @@ class Chats extends React.Component {
 
    
   render(){
+    let classs = (this.state.keys===2)?"outOfFocus":"";
+
     //   console.log(this.state.addFriendClass,this.state.addFriendStatus)
-        if(this.state.user && this.state.occupants.length){
+        if(this.state.user && this.state.occupants && this.state.keys){
+            console.log(this.state.keys)
             return (
                 <div className={"col "+this.state.theme}>
-                <div className="row" style={{height:'100vh'}}>
+                {this.state.keys===2 &&
+                    <GenKey 
+                        uid={this.state.user.uid}
+                        setPrivate={this.setPrivate}
+                        setKeys={this.setKeys}
+                    />
+                }
+                <div className={"row "+classs} style={{height:'100vh'}}>
                     <Sidebar
                         recipient={this.state.recipient}
                         MessageListClass={this.state.MessageListClass}
@@ -416,7 +439,9 @@ class Chats extends React.Component {
         }
         else{
             return(
-                <Loader private={this.state.private} setPrivate={this.setPrivate}/>
+                <div className={this.state.theme}>
+                    <Loader private={this.state.private} setPrivate={this.setPrivate}/>
+                </div>
             )
         }
     }

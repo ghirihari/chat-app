@@ -1,5 +1,5 @@
 import React from 'react';
-// import { Redirect } from "react-router-dom";
+import Logo from './assets/pew.jpg'; 
 import firebase from '../config/firebase'
 import '../App.css';
 import tone from './assets/Tone.mp3'
@@ -94,8 +94,8 @@ class ChatScreen extends React.Component {
     }
 
     render(){
-            console.log(this.props.name.sharedKey)
-            return(
+        let dp = (this.props.name.displayPicture)?this.props.name.displayPicture:Logo;
+        return(
                 <div className="chat-col">
                     <audio id="tone" className="audio-element">
                             <source src={tone}></source>
@@ -109,7 +109,7 @@ class ChatScreen extends React.Component {
                         </div>
 
                         <div className="chatDP_frame">
-                            <img alt="DP" className="chatDP"src={this.props.name.displayPicture} />
+                            <img alt="DP" className="chatDP"src={dp} />
                         </div>
                         <div style={{display:'block',alignSelf: 'center', paddingLeft:'10px', flexGrow:'1'}}>
                             <h5 className="recepient_name" style={{marginBottom:'0px'}}>{this.props.name.displayName}</h5>
@@ -145,7 +145,7 @@ class ChatScreen extends React.Component {
                             console.log(item)
                             var MessageText = data.text;
 
-                            if(this.props.private)
+                            if(this.props.private && data.type==="chat")
                             {
                                 try{
                                     var pure = this.b64decode(data.text)
@@ -216,8 +216,8 @@ class ChatScreen extends React.Component {
                             </div> */}
 
                             <div className="input-group-append">
-                                <button className="btn btn-white"  type="button" onClick={this.sendMessage}>
-                                    <svg fill="black" height={30} viewBox="0 0 24 24" width={30} xmlns="http://www.w3.org/2000/svg">
+                                <button className="btn btn-danger"  type="button" onClick={this.sendMessage}>
+                                    <svg fill="white" height={30} viewBox="0 0 24 24" width={30} xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8.75 17.612v4.638a.751.751 0 001.354.444l2.713-3.692zM23.685.139a.75.75 0 00-.782-.054l-22.5 11.75a.752.752 0 00.104 1.375l6.255 2.138 13.321-11.39L9.775 16.377l10.483 3.583a.753.753 0 00.984-.599l2.75-18.5a.751.751 0 00-.307-.722z" />
                                     </svg>
                                 </button>

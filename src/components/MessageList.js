@@ -2,7 +2,7 @@ import React from 'react';
 import CryptoJS from 'crypto-js';
 
 // import { Redirect } from "react-router-dom";
-// import logo from './assets/pew.jpg'; 
+import Logo from './assets/pew.jpg'; 
 
 class MessageList extends React.Component {
 
@@ -36,14 +36,15 @@ class MessageList extends React.Component {
                     {this.props.users.map((item,index) => {
                         var len = Object.entries(this.props.chatData[item.id]).length;
                         var text = Object.entries(this.props.chatData[item.id])[len-1][1].text;
+                        var type = Object.entries(this.props.chatData[item.id])[len-1][1].type;
                         var message_class = "row messages_list_item shadow";
 
                         if(this.props.recipient===item){
                             message_class+=" gradient-list";
                         }
-
                         var MessageText = text;
-                        if(this.props.private)
+
+                        if((this.props.private) && type==="chat")
                         {
                             try{
                                 var pure = this.b64decode(text)
@@ -58,10 +59,13 @@ class MessageList extends React.Component {
 
                         if(text.length>35)
                             text = text.slice(0,35)+'...'
+
+                        console.log(item)
+                        let dp = (item.displayPicture)?item.displayPicture:Logo;
                         return(
                             <div id={'message-list-'+item.id} onClick={()=>this.select(item)} className={message_class} key={index}>
                                 <div className="col-2" style={{padding:'0px'}}>
-                                    <img alt="DP" className="listDP"src={item.displayPicture} />
+                                    <img alt="DP" className="listDP"src={dp} />
                                 </div>
                                 <div className="col-10" style={{alignSelf:'center'}}>
                                     <div className="row" style={{overflow:'hidden'}}>

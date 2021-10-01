@@ -77,9 +77,9 @@ class Login extends React.Component {
                     <input type="password" className="form-control login-input-field key" placeholder="Password" onChange={this.passTyped}/>
                 </div>
 
-                <div className="form-group">
+                {/* <div className="form-group">
                     <input type="password" className="form-control login-input-field key" placeholder="Encryption Key" onChange={this.keyTyped}/>
-                </div>
+                </div> */}
 
                 {this.state.error &&
                   <div className="form-group error-card">
