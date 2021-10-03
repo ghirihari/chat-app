@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './assets/pew.jpg'; 
+import Logo from './assets/pew.jpg'; 
 import firebase from '../config/firebase'
 
 class PostList extends React.Component {
@@ -109,11 +109,7 @@ class PostList extends React.Component {
                         </div>
                         <div id={this.props.user.uid} onClick={()=>{this.setMe()}} className={"row messages_list_item shadow "} key={this.props.user.id}>
                                     <div className="col-2" style={{padding:'0px'}}>
-                                        {this.props.user.photoURL ?
-                                            <img alt="DP" className="listDP"src={this.props.user.photoURL} />
-                                            :
-                                            <img alt="DP" className="listDP"src={logo} />
-                                        }
+                                        <img alt="DP" className="listDP"src={this.props.user.photoURL} />
                                     </div>
                                     <div className="col" style={{alignSelf:'center'}}>
                                         <div className="row">
@@ -124,10 +120,11 @@ class PostList extends React.Component {
                                 </div>
                             </div>    
                         {this.props.friends.map((item,index) => {
+                                let dp = (item.displayPicture)?item.displayPicture:Logo;
                             return(
                                 <div id={item.id} onClick={()=>{this.props.setWall(item)}} className={"row messages_list_item shadow "} key={index}>
                                     <div className="col-2" style={{padding:'0px'}}>
-                                        <img alt="DP" className="listDP"src={item.displayPicture} />
+                                        <img alt="DP" className="listDP"src={dp} />
                                     </div>
                                     <div className="col" style={{alignSelf:'center'}}>
                                         <div className="row">

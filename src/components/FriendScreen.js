@@ -1,5 +1,6 @@
 import React from 'react';
 import '../App.css';
+import Logo from './assets/pew.jpg'
 
 function FriendTile(props) {
     var streak = 0;
@@ -7,11 +8,12 @@ function FriendTile(props) {
     var date = new Date(props.id.time);
     var difference_ms = today.getTime() - date.getTime();      
     streak = Math.round(difference_ms/(1000 * 3600 * 24));
+    let dp = (props.id.displayPicture)?props.id.displayPicture:Logo;
 
     return(
         <div className="row messages_list_item shadow">
             <div className="col-3" style={{padding:'0px'}}>
-                <img alt="DP" className="friend-tile"src={props.id.displayPicture} />
+                <img alt="DP" className="friend-tile"src={dp} />
             </div>
             <div className="col-9" style={{alignSelf:'center'}}>
             <label className="friends-list-name">{props.id.displayName}</label>

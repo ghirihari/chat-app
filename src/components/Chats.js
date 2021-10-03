@@ -2,10 +2,10 @@ import React from 'react';
 import '../App.css';
 import firebase from '../config/firebase';
 import MainScreen from './MainScreen';
-import CryptoJS from 'crypto-js';
 import Sidebar from './Sidebar'
 import Loader from './Loader';
-import GenKey from './GenKey';
+import { GenKey, SetKey } from './GenKey';
+import tone from './assets/Tone.mp3'
 
 class Chats extends React.Component {
 
@@ -34,12 +34,14 @@ class Chats extends React.Component {
         private:localStorage.private,
         uploading:false,
         keys:0,
+        noKey:false,
         // 0 : loading
         // 1 : Yes
         // 2 : No
         }
+        this.audio = null;
     } 
-
+    setnoKey = () => this.setState({noKey:true});
     setKeys = () => this.setState({keys:true});
 
     toggleTheme = () => {
@@ -55,14 +57,16 @@ class Chats extends React.Component {
     setPrivate = (key) => {
         if(key=="")
         {
-            this.setState({private:''})
+            localStorage.private = '';
         }
         var k = new Buffer(key);
-        this.setState({private:k.toString('base64')})
+        // this.setState({private:k.toString('base64')})
         localStorage.private = k.toString('base64')
-        this.renderFriends(this.state.user);
-        this.getChats();
-        console.log(key)    
+        window.location.reload(); 
+
+        // this.renderFriends(this.state.user);
+        // this.getChats();
+        // console.log(key)    
     }
 
     setMenu = (menu) => {
@@ -288,15 +292,18 @@ class Chats extends React.Component {
 
         chats.on('value', (snapshot) => {
             this.setState({chatData:snapshot.val()})
-            // console.log('On',snapshot.val())
+            console.log('On',snapshot.val())
         });
         chats.on('child_changed', (data) => {
             let rec_id = this.state.recipient ? this.state.recipient.id : null;
-            // console.log(data.key,rec_id)
             if(data.key !== rec_id){
+                console.log(data.key,rec_id)
                 // console.log('Message Received')
                 // console.log('message-list-'+data.key)
-                // document.getElementById('message-list-'+data.key).classList.add('gradient')
+                document.getElementById('message-list-'+data.key).classList.add('gradient');
+                this.audioEl = document.getElementById('tone');
+                this.audioEl.play();
+
             }
             // console.log('child_changed',data.key, data.val());
         });
@@ -374,11 +381,10 @@ class Chats extends React.Component {
 
    
   render(){
-    let classs = (this.state.keys===2)?"outOfFocus":"";
-
-    //   console.log(this.state.addFriendClass,this.state.addFriendStatus)
+    let classs = (this.state.keys===2 || (this.state.private==="" && this.state.noKey===false))?"outOfFocus":"";
+    
         if(this.state.user && this.state.occupants && this.state.keys){
-            console.log(this.state.keys)
+            console.log(this.state.private)
             return (
                 <div className={"col "+this.state.theme}>
                 {this.state.keys===2 &&
@@ -388,7 +394,16 @@ class Chats extends React.Component {
                         setKeys={this.setKeys}
                     />
                 }
+                {this.state.keys===1 && this.state.private==="" && this.state.noKey===false &&
+                    <SetKey
+                        setPrivate={this.setPrivate}
+                        setnoKey={this.setnoKey }
+                    />
+                }
                 <div className={"row "+classs} style={{height:'100vh'}}>
+                    <audio id="tone" className="audio-element">
+                            <source src={tone}></source>
+                    </audio>
                     <Sidebar
                         recipient={this.state.recipient}
                         MessageListClass={this.state.MessageListClass}

@@ -2,7 +2,6 @@ import React from 'react';
 import Logo from './assets/pew.jpg'; 
 import firebase from '../config/firebase'
 import '../App.css';
-import tone from './assets/Tone.mp3'
 import CryptoJS from 'crypto-js';
   
 
@@ -74,22 +73,12 @@ class ChatScreen extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(prevProps.data !== this.props.data)
-        {
-            console.log('sent',this.state.sent)
-            if(this.state.sent===true)
-            {
-                this.setState({sent:false})
-            }else{
-                this.audioEl.play();
-            }
-        }
         this.scrollToBottom();
     }
     
     
     componentDidMount = () => {
-        this.audioEl = document.getElementById('tone')
+        // this.audioEl = document.getElementById('tone')
         this.scrollToBottom();
     }
 
@@ -97,9 +86,9 @@ class ChatScreen extends React.Component {
         let dp = (this.props.name.displayPicture)?this.props.name.displayPicture:Logo;
         return(
                 <div className="chat-col">
-                    <audio id="tone" className="audio-element">
+                    {/* <audio id="tone" className="audio-element">
                             <source src={tone}></source>
-                    </audio>
+                    </audio> */}
                     {/* Chat Title */}
                     <div className="chat-title shadow" style={{display: 'flex',alignItems: 'center',justifyContent: 'center'}}>
                         <div onClick={()=>this.props.unSetRec()}>

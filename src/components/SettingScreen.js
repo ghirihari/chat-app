@@ -172,7 +172,7 @@ class SettingScreen extends React.Component {
 
     changeKey = (data) => {
         this.props.setPrivate(data);
-        window.location.reload(); 
+        // window.location.reload(); 
 
     }
   

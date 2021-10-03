@@ -20,7 +20,7 @@ class MessageList extends React.Component {
     }
     
     select = (item) => {
-        console.log(item)
+        // console.log(item)
         this.setState({selected:item})
         this.props.setRec(item)
     }
@@ -60,7 +60,7 @@ class MessageList extends React.Component {
                         if(text.length>35)
                             text = text.slice(0,35)+'...'
 
-                        console.log(item)
+                        // console.log(item)
                         let dp = (item.displayPicture)?item.displayPicture:Logo;
                         return(
                             <div id={'message-list-'+item.id} onClick={()=>this.select(item)} className={message_class} key={index}>

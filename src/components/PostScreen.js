@@ -1,5 +1,6 @@
 import React from 'react';
-import Posts from './assets/posts.png'
+import Posts from './assets/posts.png';
+import Logo from './assets/pew.jpg'
 
 function PostTile(props) {
     var date = new Date(props.time);
@@ -20,6 +21,11 @@ function PostTile(props) {
 
 class PostScreen extends React.Component {
       render(){
+        let dp = ""
+        if(this.props.name){
+            dp = (this.props.name.displayPicture)?this.props.name.displayPicture:Logo;
+        }
+
         return(
             <div className="col chat-col" style={{ overflowY:'scroll'}}>
                 {!this.props.name &&
@@ -43,7 +49,7 @@ class PostScreen extends React.Component {
                             </svg>
                         </div>
                         <div className="chatDP_frame">
-                            <img alt="DP" className="chatDP"src={this.props.name.displayPicture} />
+                            <img alt="DP" className="chatDP"src={dp} />
                         </div>
                         <div style={{display:'block',alignSelf: 'center', paddingLeft:'10px', flexGrow:'1'}}>
                             <h5 className="recepient_name" style={{marginBottom:'0px'}}>{this.props.name.displayName}</h5>
